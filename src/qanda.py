@@ -11,14 +11,13 @@ import question
 # Q&A - looks through learning folder for asciidoc files
 def run_qanda():
 	days = get_days()
-	shared.page(msg='Doing Q&A, hit Return to continue')
 
 	question_ids        = set()
 	tagged_question_ids = set()
 	tag_ids             = []
 
 	# Choose tags, get related questions
-	tag_ids             = tag.choose_tags()
+	tag_ids             = question.choose_tags()
 	tagged_question_ids = get_tagged_questions(tag_ids)
 
 	for question_id in tagged_question_ids:
@@ -30,18 +29,29 @@ def run_qanda():
 			question_ids.add(question_id)
 		else:
 			# If question is in 'R'evise mode, always ask it
-			question_status = rsdb.get_question_state(question_id)
-			assert isinstance(question_status, string)
+			question_status = rsdb.get_question_status(question_id)
+			assert isinstance(question_status, str)
 			if question_status == 'R':
 				question_ids.add(question_id)
 			else:
 				# If not, how many times has it been asked? If less than the number of days before that it should have been asked (the index), then ask it.
 				times_asked = rsdb.get_times_asked(question_id)
 				assert isinstance(times_asked, int)
-				if times_asked < days.index(age)+1:
+				# Find number of days in list that is less than age of question, ie how many times this should have been asked.
+				count = 0
+				for day in days:
+					count += 1
+					if day >= age:
+						break
+				day = None
+				# If this hasn't been asked enough, ask it.
+				if times_asked < count:
 					question_ids.add(question_id)
+				count, times_asked, question_status = None, None, None
+	tag_ids, tagged_question_ids = None, None
 	# Ask the questions
 	ask_questions(list(question_ids))
+	question_ids = None
 
 def ask_questions(question_ids):
 	assert isinstance(question_ids, list)
@@ -145,11 +155,13 @@ def get_status(status):
 		return 'Active'
 
 
-def get_tagged_questions(tag_set):
-	assert isinstance(tag_set, set)
-	tag_ids = list(tag_set)
+def get_tagged_questions(tag_ids_set):
+	assert isinstance(tag_ids_set, set)
+	tag_ids_list = list(tag_ids_set)
+	for tag_id in tag_ids_list:
+		assert isinstance(tag_id, int)
 	# Get related questions
-	tagged_question_ids = rsdb.get_related_questions(tag_ids)
+	tagged_question_ids = rsdb.get_related_questions(tag_ids_list)
 	assert isinstance(tagged_question_ids, list)
 	return tagged_question_ids
 
