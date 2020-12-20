@@ -4,7 +4,6 @@ import tag
 import shared
 
 def add_question():
-
 	tags = tag.get_tags()
 	res  = tag.choose_tags()
 	# Figure out which primary key ids were picked.
@@ -13,7 +12,6 @@ def add_question():
 	# Get the choices made from the index of choices
 	for tag_chosen in res:
 		tag_indexes_chosen.add(tag_chosen[1])
-	print(tag_indexes_chosen)
 	# Get the actual primary key ids from the choices made
 	for tag_indexes_choice in tag_indexes_chosen:
 		tag_ids_chosen.add(tags[tag_indexes_choice][0])
@@ -21,14 +19,16 @@ def add_question():
 	tag_indexes_chosen = None
 	tag_indexes_choice = None
 
-	# Get question
-	question = shared.ask('Please input question: ')
-
-	# Get answer
-	answer = shared.ask('Please input answer: ')
-
-	# Insert question, and tags
-	rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
+	while True:
+		# Get question
+		question = shared.ask('Please input question: ')
+		# Get answer
+		answer = shared.ask('Please input answer: ')
+		# Insert question, and tags
+		rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
+		do_continue = shared.ask('Add another question with these tags (y/n)?')
+		if do_continue not in ('y','Y','YES','Yes'):
+			break
 
 
 if __name__ == '__main__':

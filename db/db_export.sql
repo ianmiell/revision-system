@@ -9,6 +9,7 @@ CREATE TABLE tag (
 );
 INSERT INTO tag VALUES(1,'AWS Associate Solutions Architect Exam','','A');
 INSERT INTO tag VALUES(2,'AWS Professional Solutions Architect Exam','','A');
+INSERT INTO tag VALUES(3,'AWS Accelerator','','A');
 CREATE TABLE question_tag (
        question_id integer not null,
        tag_id integer not null,
@@ -24,6 +25,8 @@ INSERT INTO question_tag VALUES(3,1);
 INSERT INTO question_tag VALUES(3,2);
 INSERT INTO question_tag VALUES(4,1);
 INSERT INTO question_tag VALUES(4,2);
+INSERT INTO question_tag VALUES(5,1);
+INSERT INTO question_tag VALUES(5,2);
 CREATE TABLE question (
        question_id integer primary key not null,
        date_added integer default current_timestamp not null,
@@ -36,6 +39,7 @@ INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s vi
 INSERT INTO question VALUES(2,'2020-12-16 16:46:21','What is RDS?','Amazon''s virtual relational database service.','I');
 INSERT INTO question VALUES(3,'2020-12-19 12:19:04','What is Global Accelerator?','Uses Anycast IPs to speed up connections to edge locations. It also has healthchecks and DDoS protection','A');
 INSERT INTO question VALUES(4,'2020-12-19 12:20:05','What is Unicast IP vs Anycast IP?','Unicast is normal IP, Anycast is multiple servers have an IP, and user routed to nearest one. It goes through the edge location.','A');
+INSERT INTO question VALUES(5,'2020-12-19 12:22:50','What is the difference between Global Accelerator vs CloudFront?','CloudFront content is served at the edge. Accelerator proxies packets, good fit for gaming (UDP etc).','A');
 CREATE TABLE answer (
        answer_id integer primary key not null,
        question_id integer not null,
