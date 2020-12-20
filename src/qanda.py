@@ -61,7 +61,7 @@ def ask_questions(question_ids):
 			options.append({'action': 'active',   'description': 'Take out of revise mode'})
 		else:
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
-		picked_list = pick.pick(options, title, multi_select=True, indicator='=>', options_map_func=get_option_description)
+		picked_list = pick.pick(options, title, multi_select=True, indicator='=>', options_map_func=shared.get_option_description)
 		for picked in picked_list:
 			print(picked)
 			action = picked[0].get('action')
@@ -99,7 +99,7 @@ def review_questions():
 		elif question_status == 'I':
 			options.append({'action': 'active',   'description': 'Make question active'})
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
-		res = pick.pick(options, title, multi_select=False, indicator='=>', options_map_func=get_option_description)
+		res = pick.pick(options, title, multi_select=False, indicator='=>', options_map_func=shared.get_option_description)
 
 
 def get_question(question_id):
@@ -137,10 +137,6 @@ def get_tagged_questions(tag_tuples):
 	tagged_question_ids = rsdb.get_related_questions(tag_ids)
 	assert isinstance(tagged_question_ids, list)
 	return tagged_question_ids
-
-
-def get_option_description(option):
-	return option.get('description')
 
 
 if __name__ == '__main__':

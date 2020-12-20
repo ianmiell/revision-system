@@ -13,5 +13,8 @@ def ask(msg=''):
 		print(msg)
 	return input()
 
+def get_option_description(option):
+    return option.get('description')
+
 
 DEBUG = False
