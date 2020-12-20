@@ -40,6 +40,9 @@ def choose_tags():
 	options = []
 	[ options.append(x[1]) for x in tags ]
 	res = pick.pick(options, title='Choose (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
+	assert isinstance(res, list)
+	for item in res:
+		assert isinstance(item, tuple)
 	return res
 
 

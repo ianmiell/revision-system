@@ -1256,6 +1256,7 @@ INSERT INTO question_tag VALUES(627,3);
 INSERT INTO question_tag VALUES(628,3);
 INSERT INTO question_tag VALUES(629,3);
 INSERT INTO question_tag VALUES(630,3);
+INSERT INTO question_tag VALUES(610,1);
 CREATE TABLE question (
        question_id integer primary key not null,
        date_added integer default current_timestamp not null,

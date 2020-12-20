@@ -5,7 +5,7 @@ import shared
 
 
 def add_question():
-	tag_ids_chosen = get_tag_ids_chosen()
+	tag_ids_chosen = choose_tags()
 	while True:
 		# Get question
 		question = shared.ask('Please input question: ')
@@ -18,7 +18,7 @@ def add_question():
 			break
 
 
-def get_tag_ids_chosen():
+def choose_tags():
 	tags = tag.get_tags()
 	res  = tag.choose_tags()
 	# Figure out which primary key ids were picked.
@@ -38,7 +38,7 @@ def get_tag_ids_chosen():
 
 # This option exists for deprecated question files in old version of this application.
 def bulk_insert():
-	tag_ids_chosen = get_tag_ids_chosen()
+	tag_ids_chosen = choose_tags()
 	filename = shared.ask('\n\nPlease input filename: ')
 	for line in open(filename, 'r').readlines():
 		print(line)

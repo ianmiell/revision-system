@@ -1,14 +1,16 @@
 import sqlite3
-#import datetime
+
 
 def get_conn():
 	conn = sqlite3.connect('db/revision-system.db')
 	c = conn.cursor()
 	return conn, c
 
+
 def commit_and_close_conn(conn):
 	conn.commit()
 	conn.close()
+
 
 def run_qry(qry_str, args=None):
 	conn, c = get_conn()
@@ -19,11 +21,13 @@ def run_qry(qry_str, args=None):
 	commit_and_close_conn(conn)
 	return ret
 
+
 def fetchone(qry_str, args):
 	conn, c = get_conn()
 	result = c.execute(qry_str, args).fetchone()
 	commit_and_close_conn(conn)
 	return result
+
 
 def get_tags():
 	conn, c = get_conn()
@@ -34,6 +38,7 @@ def get_tags():
 	commit_and_close_conn(conn)
 	return tags
 
+
 # TODO: handle dupe
 def add_tag(tag, notes, status='A'):
 	conn, c = get_conn()
@@ -42,6 +47,7 @@ def add_tag(tag, notes, status='A'):
 	tag_id = c.lastrowid
 	commit_and_close_conn(conn)
 	return True, tag_id
+
 
 # TODO: handle dupe
 def add_question(question, answer, tag_ids):
@@ -56,6 +62,14 @@ def add_question(question, answer, tag_ids):
 	commit_and_close_conn(conn)
 	return True, question_id
 
+
+def add_question_tags(question_id, tag_ids):
+	conn, c = get_conn()
+	for tag_id in tag_ids:
+		c.execute('insert or replace into question_tag (question_id, tag_id) values(?, ?)', (question_id, tag_id))
+	commit_and_close_conn(conn)
+
+
 def get_related_questions(tag_ids, status=None):
 	# By default, active questions only.
 	conn, c = get_conn()
@@ -68,12 +82,14 @@ def get_related_questions(tag_ids, status=None):
 	commit_and_close_conn(conn)
 	return list(questions)
 
+
 def get_question_age(question_id):
 	conn, c = get_conn()
 	c.execute(r'''select (strftime('%s','now') - strftime('%s',date_added)) / 60 / 60 / 24 from question where question_id = ?''', (question_id,))
 	age = c.fetchone()[0]
 	commit_and_close_conn(conn)
 	return age
+
 
 def get_times_asked(question_id):
 	conn, c = get_conn()
@@ -82,12 +98,14 @@ def get_times_asked(question_id):
 	commit_and_close_conn(conn)
 	return times_asked
 
+
 def get_question_status(question_id):
 	conn, c = get_conn()
 	c.execute(r'''select status from question where question_id = ?''', (question_id,))
 	question_status = c.fetchone()[0]
 	commit_and_close_conn(conn)
 	return question_status
+
 
 def get_question(question_id):
 	conn, c = get_conn()
@@ -96,13 +114,16 @@ def get_question(question_id):
 	commit_and_close_conn(conn)
 	return question
 
+
 def insert_answer(question_id, result):
 	assert result in ('R', 'W')
 	run_qry('''insert into answer (question_id, result) values (?, ?)''',(question_id, result))
 
+
 def update_question_status(question_id, status):
 	assert status in ('A', 'I', 'R')
 	run_qry('''update question set status = ? where question_id = ?''',(status, question_id))
+
 
 if __name__ == '__main__':
 	#

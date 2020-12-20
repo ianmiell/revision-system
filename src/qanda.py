@@ -18,8 +18,8 @@ def run_qanda():
 	tag_ids             = []
 
 	# Choose tags, get related questions
-	tag_set             = tag.choose_tags()
-	tagged_question_ids = get_tagged_questions(tag_set)
+	tag_ids             = tag.choose_tags()
+	tagged_question_ids = get_tagged_questions(tag_ids)
 
 	for question_id in tagged_question_ids:
 		# How many days old is the question?
@@ -80,8 +80,8 @@ def ask_questions(question_ids):
 
 def review_questions():
 	# Choose tags
-	tag_set             = question.get_tag_ids_chosen()
-	tagged_question_ids = get_tagged_questions(tag_set)
+	tag_ids             = question.choose_tags()
+	tagged_question_ids = get_tagged_questions(tag_ids)
 	for question_id in tagged_question_ids:
 		question_string, answer, question_status = get_question(question_id)
 		status_description = get_status(question_status)
@@ -89,6 +89,7 @@ def review_questions():
 		options = [
 			{'action': 'do_nothing', 'description': 'Do nothing'},
 			{'action': 'inactive',   'description': 'Do not ask again'},
+			{'action': 'tag',        'description': 'Tag question'},
 			{'action': 'finish',     'description': 'Finish review'},
 		]
 		if question_status == 'R':
@@ -110,6 +111,11 @@ def review_questions():
 			rsdb.update_question_status(question_id, 'I')
 		elif action == 'revise':
 			rsdb.update_question_status(question_id, 'R')
+		elif action == 'tag':
+			# TODO: tag the question
+			tag_ids = question.choose_tags()
+			rsdb.add_question_tags(question_id, tag_ids)
+			pass
 
 
 def get_question(question_id):
