@@ -1,3 +1,2 @@
-rs.db
-db/db_export.db
+db/*.db
 **pyc

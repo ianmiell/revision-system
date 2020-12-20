@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-import sys
 
 def page(msg='[Hit enter to continue]'):
 	if msg != '':
 		print(msg)
-	if sys.version_info.major == 2:
-		raw_input()
-	else:
-		input()
+	return ask(msg)
 
 def debug(text):
 	global DEBUG
 	if DEBUG:
 		print(text)
+
+def ask(msg=''):
+	if msg != '':
+		print(msg)
+	return input()
+
 
 DEBUG = False

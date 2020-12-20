@@ -29,13 +29,13 @@ def get_tags():
 	conn, c = get_conn()
 	c.execute('select tag_id, tag, notes, status from tag')
 	tags = []
-	for tags in c:
-		tags.append(tags)
+	for row in c:
+		tags.append(row)
 	commit_and_close_conn(conn)
 	return tags
 
 # TODO: handle dupe
-def add_tag(tag_text, notes, status='A'):
+def add_tag(tag, notes, status='A'):
 	conn, c = get_conn()
 	c.execute('insert into tag (tag, notes, status) values(?, ?, ?)', (tag, notes, status))
 	# Get the id
@@ -44,14 +44,15 @@ def add_tag(tag_text, notes, status='A'):
 	return True, tag_id
 
 # TODO: handle dupe
-def add_question(question, answer, category, tag_id):
+def add_question(question, answer, tag_ids):
 	conn, c = get_conn()
 	# Insert the question, then get the id
 	c.execute('insert into question (question, answer) values(?, ?)', (question, answer))
 	# Get the id
 	question_id = c.lastrowid
-	# Insert question_tag
-	c.execute('insert into question_tag (question_id, tag_id) values(?, ?)', (question_id, tag_id))
+	for tag_id in tag_ids:
+		# Insert question_tag
+		c.execute('insert into question_tag (question_id, tag_id) values(?, ?)', (question_id, tag_id))
 	commit_and_close_conn(conn)
 	return True, question_id
 

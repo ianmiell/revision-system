@@ -7,6 +7,8 @@ CREATE TABLE tag (
        status text default 'A' not null check (status = 'A' or status = 'I'),
        unique(tag)
 );
+INSERT INTO tag VALUES(1,'AWS Associate Solutions Architect Exam','','A');
+INSERT INTO tag VALUES(2,'AWS Professional Solutions Architect Exam','','A');
 CREATE TABLE question_tag (
        question_id integer not null,
        tag_id integer not null,

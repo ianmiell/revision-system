@@ -6,11 +6,11 @@ init_db:
 	cat db/db_export.sql | sqlite3 db/revision-system.db
 
 start:
-	echo 'start'
 	python3 src/main.py
 
 save_state:
 	echo ".dump" | sqlite3 db/revision-system.db > db/db_export.sql
+	# Not ready yet!
 	git commit -am "saving state" || true
 	git pull --rebase -s recursive -X ours
 	git push
