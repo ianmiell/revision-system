@@ -77,7 +77,6 @@ def get_related_questions(tag_ids, status=None):
 		status = 'A'
 	questions = set()
 	for tag_id in tag_ids:
-		print(tag_id)
 		for row in c.execute('select question_id from question_tag where tag_id = ?', (tag_id,)):
 			questions.add(row[0])
 	commit_and_close_conn(conn)

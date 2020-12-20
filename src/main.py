@@ -41,7 +41,7 @@ def main():
 		elif action == 'quit':
 			sys.exit()
 		if revise:
-			run_revise()
+			qanda.run_revise()
 		if do_qanda:
 			qanda.run_qanda()
 		if add_question:

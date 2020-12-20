@@ -24,39 +24,66 @@ def run_qanda():
 		# How many days old is the question?
 		age = rsdb.get_question_age(question_id)
 		assert isinstance(age, int)
+		question_status = rsdb.get_question_status(question_id)
+		assert isinstance(question_status, str)
+		# If question is in 'R'evise mode, always ask it
+		if question_status == 'R':
+			question_ids.add(question_id)
+		elif question_status == 'I':
+			# If question is inactive, don't include it.
+			continue
 		# If q is 'n' days old, add it.
 		if age in days:
 			question_ids.add(question_id)
 		else:
-			# If question is in 'R'evise mode, always ask it
-			question_status = rsdb.get_question_status(question_id)
-			assert isinstance(question_status, str)
-			if question_status == 'R':
+			# If not, how many times has it been asked? If less than the number of days before that it should have been asked (the index), then ask it.
+			times_asked = rsdb.get_times_asked(question_id)
+			assert isinstance(times_asked, int)
+			# Find number of days in list that is less than age of question, ie how many times this should have been asked.
+			count = 0
+			for day in days:
+				count += 1
+				if day >= age:
+					break
+			day = None
+			# If this hasn't been asked enough, ask it.
+			if times_asked < count:
 				question_ids.add(question_id)
-			else:
-				# If not, how many times has it been asked? If less than the number of days before that it should have been asked (the index), then ask it.
-				times_asked = rsdb.get_times_asked(question_id)
-				assert isinstance(times_asked, int)
-				# Find number of days in list that is less than age of question, ie how many times this should have been asked.
-				count = 0
-				for day in days:
-					count += 1
-					if day >= age:
-						break
-				day = None
-				# If this hasn't been asked enough, ask it.
-				if times_asked < count:
-					question_ids.add(question_id)
-				count, times_asked, question_status = None, None, None
+			count, times_asked, question_status = None, None, None
 	tag_ids, tagged_question_ids = None, None
 	# Ask the questions
 	ask_questions(list(question_ids))
 	question_ids = None
 
+
+def run_revise():
+	question_ids        = set()
+	tagged_question_ids = set()
+	tag_ids             = []
+
+	# Choose tags, get related questions
+	tag_ids             = question.choose_tags()
+	tagged_question_ids = get_tagged_questions(tag_ids)
+	for question_id in tagged_question_ids:
+		question_status = rsdb.get_question_status(question_id)
+		if question_status == 'R':
+			question_ids.add(question_id)
+	tag_ids, tagged_question_ids = None, None
+	# Ask the questions
+	ask_questions(list(question_ids))
+	question_ids = None
+
+
+
+
+
+
 def ask_questions(question_ids):
 	assert isinstance(question_ids, list)
 	num_questions           = len(question_ids)
 	num_questions_remaining = num_questions
+	# Shuffle questions
+	random.shuffle(question_ids)
 	for question_id in question_ids:
 		question, answer, question_status = get_question(question_id)
 		# Ask question
@@ -64,28 +91,87 @@ def ask_questions(question_ids):
 		# Give answer
 		shared.page('A: ' + answer)
 		title = 'Your answer to question:\n\n\t' + question + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move'
+		# TODO: Edit question
+		# TODO: Edit answer
 		options = [
+			{'action': 'wrong',    'description': 'I got that wrong'},
 			{'action': 'right',    'description': 'I got that right'},
-			{'action': 'inactive', 'description': 'Do not ask again'},
+			{'action': 'nothing',  'description': 'Do nothing'},
+			{'action': 'done',     'description': 'Return to main menu'},
+			{'action': 'quit',     'description': 'Quit and save state'},
 		]
 		if question_status == 'R':
 			options.append({'action': 'active',   'description': 'Take out of revise mode'})
-		else:
+			options.append({'action': 'inactive', 'description': 'Do not ask again'})
+		elif question_status == 'A':
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
-		picked_list = pick.pick(options, title, multi_select=True, indicator='=>', options_map_func=shared.get_option_description)
-		for picked in picked_list:
-			action = picked[0].get('action')
-			if action == 'right':
-				rsdb.insert_answer(question_id, 'R')
-			else:
+			options.append({'action': 'inactive', 'description': 'Do not ask again'})
+		elif question_status == 'I':
+			options.append({'action': 'active',   'description': 'Take out of revise mode'})
+			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
+		while True:
+			picked_list = pick.pick(options, title, multi_select=True, indicator='x', options_map_func=shared.get_option_description)
+			active   = False
+			done     = False
+			inactive = False
+			nothing  = False
+			quit     = False
+			revise   = False
+			right    = False
+			wrong    = False
+			# Gather choices
+			for picked in picked_list:
+				action = picked[0].get('action')
+				if action == 'active':
+					quit     = True
+				if action == 'done':
+					done     = True
+				if action == 'inactive':
+					inactive = True
+				if action == 'nothing':
+					nothing  = True
+				if action == 'quit':
+					quit     = True
+				if action == 'revise':
+					quit     = True
+				if action == 'right':
+					quit     = True
+				if action == 'wrong':
+					wrong    = True
+			# Checks
+			if right and wrong:
+				print('Cannot be right and wrong!')
+				time.sleep(3)
+				continue
+			if not right and not wrong and not nothing and not done and not quit:
+				print('Must be right or wrong!')
+				time.sleep(3)
+				continue
+			if (right or wrong or active or inactive or revise) and nothing:
+				print('Cannot do nothing and be right or wrong!')
+				time.sleep(3)
+				continue
+			if (active and inactive) or (inactive and revise) or (active and revise):
+				print('Cannot be multiple states (should not get here)!')
+				time.sleep(3)
+				continue
+			# Handle choices in correct order
+			if action == 'nothing':
+				continue
+			if action == 'wrong':
 				rsdb.insert_answer(question_id, 'W')
+			elif action == 'right':
+				rsdb.insert_answer(question_id, 'R')
 			if action == 'inactive':
 				rsdb.update_question_status(question_id, 'I')
 			if action == 'active':
 				rsdb.update_question_status(question_id, 'A')
-			# Revise over-rides inactive
 			if action == 'revise':
 				rsdb.update_question_status(question_id, 'R')
+			if action == 'done':
+				return
+			if action == 'quit':
+				sys.exit(0)
 
 
 def review_questions():
@@ -122,10 +208,8 @@ def review_questions():
 		elif action == 'revise':
 			rsdb.update_question_status(question_id, 'R')
 		elif action == 'tag':
-			# TODO: tag the question
 			tag_ids = question.choose_tags()
 			rsdb.add_question_tags(question_id, tag_ids)
-			pass
 
 
 def get_question(question_id):

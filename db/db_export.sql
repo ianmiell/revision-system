@@ -1498,7 +1498,7 @@ INSERT INTO question VALUES(231,'2020-12-19 16:15:04',replace('What does Elastic
 INSERT INTO question VALUES(232,'2020-12-19 16:15:04',replace('What env types for Elastic Beanstalk are there?\n','\n',char(10)),replace('Simple instance.  Load balancing & autoscaling\n','\n',char(10)),'A');
 INSERT INTO question VALUES(233,'2020-12-19 16:15:04',replace('How is EFS charged?\n','\n',char(10)),replace('By files used. 30c per Gig.\n','\n',char(10)),'A');
 INSERT INTO question VALUES(234,'2020-12-19 16:15:04',replace('What is the durability?\n','\n',char(10)),replace('None yet\n','\n',char(10)),'A');
-INSERT INTO question VALUES(235,'2020-12-19 16:15:04',replace('It''s stored in one AZ. True or False?\n','\n',char(10)),replace('No, it''s replicated.\n','\n',char(10)),'A');
+INSERT INTO question VALUES(235,'2020-12-19 16:15:04',replace('EFS volumes are stored in one AZ. True or False?\n','\n',char(10)),replace('No, it''s replicated.\n','\n',char(10)),'A');
 INSERT INTO question VALUES(236,'2020-12-19 16:15:04',replace('What''s the consistency model for EFS?\n','\n',char(10)),replace('Read after write consistency\n','\n',char(10)),'A');
 INSERT INTO question VALUES(237,'2020-12-19 16:15:04',replace('What network granularity are mount targets made at?\n','\n',char(10)),replace('Subnet\n','\n',char(10)),'A');
 INSERT INTO question VALUES(238,'2020-12-19 16:15:04',replace('What is EMR?\n','\n',char(10)),replace('Elastic Map Reduce\n','\n',char(10)),'A');
