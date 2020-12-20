@@ -91,7 +91,7 @@ def get_question_status(question_id):
 
 def get_question(question_id):
 	conn, c = get_conn()
-	c.execute('select question_id, question, answer, status from question')
+	c.execute('select question_id, question, answer, status from question where question_id = ?',(question_id,))
 	question = c.fetchone()
 	commit_and_close_conn(conn)
 	return question

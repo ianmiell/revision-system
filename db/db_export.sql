@@ -25,7 +25,7 @@ CREATE TABLE question (
        date_added integer default current_timestamp not null,
        question text not null,
        answer text not null,
-       status text default 'A' not null check (status = 'A' or status = 'I' or status = 'R'),
+       status text default 'A' not null check (status = 'A' or status = 'I'),
        unique(question)
 );
 INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s virtual compute service.','A');
@@ -37,4 +37,10 @@ CREATE TABLE answer (
        result text not null check (result = 'R' or result = 'W'),
        foreign key(question_id) references question(question_id)
 );
+INSERT INTO answer VALUES(1,1,'2020-12-19 11:45:08','R');
+INSERT INTO answer VALUES(2,2,'2020-12-19 11:45:13','R');
+INSERT INTO answer VALUES(3,1,'2020-12-19 11:46:03','R');
+INSERT INTO answer VALUES(4,2,'2020-12-19 11:46:06','R');
+INSERT INTO answer VALUES(5,1,'2020-12-19 11:48:58','R');
+INSERT INTO answer VALUES(6,2,'2020-12-19 11:49:06','R');
 COMMIT;
