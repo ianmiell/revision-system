@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import random
+import pick
 import rsdb
 import shared
 import tag
@@ -38,26 +39,57 @@ def run_qanda():
 		if age in days:
 			question_ids.add(question_id)
 		else:
-			pass
-			# TODO: if question is in 'R'evise mode, always ask it
+			# If question is in 'R'evise mode, always ask it
+			question_status = rsdb.get_question_state(question_id)
+			assert isinstance(question_status, string)
+			if question_status == 'R':
+				question_ids.add(question_id)
 			else:
-				# TODO: If not, how many times has it been asked? If less than the number of times, then ask it.
-				pass
+				# If not, how many times has it been asked? If less than the number of days before that it should have been asked (the index), then ask it.
+				times_asked = rsdb.get_times_asked(question_id)
+				assert isinstance(times_asked, int)
+				if times_asked < days.index(age)+1:
+					question_ids.add(question_id)
 	# Ask the questions
 	ask_questions(list(question_ids))
 
 def ask_questions(question_ids):
 	assert isinstance(question_ids, list)
+	num_questions           = len(question_ids)
+	num_questions_remaining = num_questions
 	for question_id in question_ids:
-		pass
 		# Retrieve question
+		question_res = rsdb.get_question(question_id)
+		question        = question_res[1]
+		answer          = question_res[2]
+		question_status = question_res[3]
 		# Ask question
+		shared.page('Q: ' + question)
 		# Give answer
-		# Give options to:
-			# Mark q as correct/failed
-				# Pass question_id, result=R/W to insert into answer table
-			# Change question status:
-				# Never ask again (ie, make inactive)?
-					# Update question if inactive
-				# Toggle revise mode for question
-					# Update question if changing mode
+		shared.page('A: ' + answer)
+		title = 'Your answer to question:\n\n\t' + question + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move'
+		options = [
+			{'action': 'right',    'description': 'I got that right'},
+			{'action': 'inactive', 'description': 'Do not ask again'},
+		]
+		if question_status == 'R':
+			options.append({'action': 'active',   'description': 'Take out of revise mode'})
+		else:
+			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
+		def get_option_description(option):
+			return option.get('description')
+		res = pick.pick(options, title, multi_select=True, indicator='=>', options_map_func=get_option_description)
+		for res in res:
+			if res.get('action') == 'right':
+				rsdb.insert_answer(question_id, 'R')
+			else:
+				rsdb.insert_answer(question_id, 'W')
+			if res.get('action') == 'inactive':
+				rsdb.update_question_status(question_id, 'I')
+			if res.get('action') == 'active':
+				rsdb.update_question_status(question_id, 'A')
+			if res.get('action') == 'revise':
+				rsdb.update_question_status(question_id, 'R')
+
+if __name__ == '__main__':
+	ask_questions([1])

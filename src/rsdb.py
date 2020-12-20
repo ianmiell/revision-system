@@ -75,8 +75,38 @@ def get_question_age(question_id):
 	commit_and_close_conn(conn)
 	return age
 
+def get_times_asked(question_id):
+	conn, c = get_conn()
+	c.execute(r'''select count(*) from answer where question_id = ?''', (question_id,))
+	times_asked = c.fetchone()[0]
+	commit_and_close_conn(conn)
+	return times_asked
+
+def get_question_status(question_id):
+	conn, c = get_conn()
+	c.execute(r'''select status from question where question_id = ?''', (question_id,))
+	question_status = c.fetchone()[0]
+	commit_and_close_conn(conn)
+	return question_status
+
+def get_question(question_id):
+	conn, c = get_conn()
+	c.execute('select question_id, question, answer, status from question')
+	question = c.fetchone()
+	commit_and_close_conn(conn)
+	return question
+
+def insert_answer(question_id, result):
+	assert result in ('R', 'W')
+	run_qry('''insert into answer (question_id, result) values (?, ?)''',(question_id, result))
+
+def update_question_status(question_id, status):
+	assert status in ('A', 'I', 'R')
+	run_qry('''update question set status = ? where question_id = ?''',(status, question_id))
 
 if __name__ == '__main__':
 	#
 	print(get_question_age(1))
+	print(get_question_status(1))
+	print(get_times_asked(1))
 
