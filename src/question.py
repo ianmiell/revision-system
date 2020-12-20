@@ -41,9 +41,9 @@ def bulk_insert():
 	filename = shared.ask('Please input filename: ')
 	try:
 		for line in open(filename, 'r').readlines():
-			if line[:2] == 'Q:':
+			if line[:2] == 'Q:' or line[:2] == 'q:':
 				question = line[3:]
-			if line[:2] == 'A:':
+			if line[:2] == 'A:' or line[:2] == 'a':
 				answer = line[3:]
 				rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
 				print('Added: ' + question + ' with answer: ' + answer)

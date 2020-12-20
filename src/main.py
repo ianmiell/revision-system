@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pick
 import sys
+import time
 import qanda
 import tag
 import question
@@ -16,7 +17,7 @@ def main():
 			{'action': 'bulk_insert',  'description': 'Bulk insert question'},
 			{'action': 'quit',         'description': 'Quit'}
 		]
-		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description)
+		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description, min_selection_count=1)
 		action = res[0].get('action')
 		do_qanda     = False
 		revise       = False
@@ -31,6 +32,8 @@ def main():
 			add_question = True
 		elif action == 'add_tag':
 			add_tag = True
+		elif action == 'bulk_insert':
+			bulk_insert = True
 		elif action == 'quit':
 			sys.exit()
 		if revise:
@@ -43,6 +46,7 @@ def main():
 			question.bulk_insert()
 		if add_tag:
 			tag.add_tag()
+		time.sleep(2)
 
 
 if __name__ == '__main__':
