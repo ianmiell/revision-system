@@ -9,6 +9,7 @@ CREATE TABLE tag (
 );
 INSERT INTO tag VALUES(1,'AWS Associate Solutions Architect Exam','','A');
 INSERT INTO tag VALUES(2,'AWS Professional Solutions Architect Exam','','A');
+INSERT INTO tag VALUES(3,'AWS Associate Developer Exam','','A');
 CREATE TABLE question_tag (
        question_id integer not null,
        tag_id integer not null,
@@ -1234,6 +1235,27 @@ INSERT INTO question_tag VALUES(608,1);
 INSERT INTO question_tag VALUES(608,2);
 INSERT INTO question_tag VALUES(609,1);
 INSERT INTO question_tag VALUES(609,2);
+INSERT INTO question_tag VALUES(610,3);
+INSERT INTO question_tag VALUES(611,3);
+INSERT INTO question_tag VALUES(612,3);
+INSERT INTO question_tag VALUES(613,3);
+INSERT INTO question_tag VALUES(614,3);
+INSERT INTO question_tag VALUES(615,3);
+INSERT INTO question_tag VALUES(616,3);
+INSERT INTO question_tag VALUES(617,3);
+INSERT INTO question_tag VALUES(618,3);
+INSERT INTO question_tag VALUES(619,3);
+INSERT INTO question_tag VALUES(620,3);
+INSERT INTO question_tag VALUES(621,3);
+INSERT INTO question_tag VALUES(622,3);
+INSERT INTO question_tag VALUES(623,3);
+INSERT INTO question_tag VALUES(624,3);
+INSERT INTO question_tag VALUES(625,3);
+INSERT INTO question_tag VALUES(626,3);
+INSERT INTO question_tag VALUES(627,3);
+INSERT INTO question_tag VALUES(628,3);
+INSERT INTO question_tag VALUES(629,3);
+INSERT INTO question_tag VALUES(630,3);
 CREATE TABLE question (
        question_id integer primary key not null,
        date_added integer default current_timestamp not null,
@@ -1851,6 +1873,27 @@ INSERT INTO question VALUES(606,'2020-12-19 16:21:12',replace('How many Internet
 INSERT INTO question VALUES(607,'2020-12-19 16:21:12',replace('VPCs can not be peered if the CIDR range overlaps. True or False?\n','\n',char(10)),replace('False\n','\n',char(10)),'A');
 INSERT INTO question VALUES(608,'2020-12-19 16:21:12',replace('What are the items and steps in creating a VPC down to an instance that''s publicly accessible?\n','\n',char(10)),replace('Internet Gateway, VPC, Route, SUBNETs - created within instance. - IG is attached to VPC. - VPC is attached to route ROUTE. - Create route out to igw 0.0.0.0/0. - Associated route with SUBNETs. - Create INSTNACE within subnet\n','\n',char(10)),'A');
 INSERT INTO question VALUES(609,'2020-12-19 16:21:12',replace('How do you get your Windows Admin Password?\n','\n',char(10)),replace('You put in the key .pem file into a dialog on the dashboard, and the password is given to you.\n','\n',char(10)),'A');
+INSERT INTO question VALUES(610,'2020-12-19 16:23:32',replace('What is Cloud Sight?\n','\n',char(10)),replace('Image recognition API\n','\n',char(10)),'A');
+INSERT INTO question VALUES(611,'2020-12-19 16:23:32',replace('What is Code Commit?\n','\n',char(10)),replace('AWS''s version of GitHub\n','\n',char(10)),'A');
+INSERT INTO question VALUES(612,'2020-12-19 16:23:32',replace('What is Code Deploy?\n','\n',char(10)),replace('Automates code deployment to Amazon instances\n','\n',char(10)),'A');
+INSERT INTO question VALUES(613,'2020-12-19 16:23:32',replace('What is code pipeline?\n','\n',char(10)),replace('Builds test and deploys code on changes\n','\n',char(10)),'A');
+INSERT INTO question VALUES(614,'2020-12-19 16:23:32',replace('What is device farm?\n','\n',char(10)),replace('Device simulation\n','\n',char(10)),'A');
+INSERT INTO question VALUES(615,'2020-12-19 16:23:32',replace('What is workdocs?\n','\n',char(10)),replace('Document store for enterprises\n','\n',char(10)),'A');
+INSERT INTO question VALUES(616,'2020-12-19 16:23:32',replace('What is Work Mail?\n','\n',char(10)),replace('Exchange for AWS\n','\n',char(10)),'A');
+INSERT INTO question VALUES(617,'2020-12-19 16:23:32',replace('What is Workspaces?\n','\n',char(10)),replace('Virtual desktops in the cloud\n','\n',char(10)),'A');
+INSERT INTO question VALUES(618,'2020-12-19 16:23:32',replace('How often is the drive backed up? Which drive?\n','\n',char(10)),replace('D drive, every 12 hours\n','\n',char(10)),'A');
+INSERT INTO question VALUES(619,'2020-12-19 16:23:32',replace('You will need an AWS account to log into a workspace instance. True or False?\n','\n',char(10)),replace('False\n','\n',char(10)),'A');
+INSERT INTO question VALUES(620,'2020-12-19 16:23:32',replace('Which services give you root access to OS?\n','\n',char(10)),replace('Elastic Beanstalk, EC2, OpsWorks, EMR. EBS, EC2, EMR are all host-based\n','\n',char(10)),'A');
+INSERT INTO question VALUES(621,'2020-12-19 16:23:32',replace('Which Elasicache offering has automated backups?\n','\n',char(10)),replace('Redis\n','\n',char(10)),'A');
+INSERT INTO question VALUES(622,'2020-12-19 16:23:32',replace('In RDS, which DB config does not have automated backups?\n','\n',char(10)),replace('MyISAM\n','\n',char(10)),'A');
+INSERT INTO question VALUES(623,'2020-12-19 16:23:32',replace('When deleting an instance, a ___ is not removed on instance deletion\n','\n',char(10)),replace('Snapshot\n','\n',char(10)),'A');
+INSERT INTO question VALUES(624,'2020-12-19 16:23:32',replace('RedShift auto backups are retained for ___ day(s) on ___\n','\n',char(10)),replace('1 S3\n','\n',char(10)),'A');
+INSERT INTO question VALUES(625,'2020-12-19 16:23:32',replace('EC2 and RedShift backups are ___, which saves space\n','\n',char(10)),replace('Incremental\n','\n',char(10)),'A');
+INSERT INTO question VALUES(626,'2020-12-19 16:23:32',replace('What is mobile hub?\n','\n',char(10)),replace('Mobile usage monitoring\n','\n',char(10)),'A');
+INSERT INTO question VALUES(627,'2020-12-19 16:23:32',replace('What is OpsWorks?\n','\n',char(10)),replace('Uses Chef recipes and bash scripts rather than cloud formation templates\n','\n',char(10)),'A');
+INSERT INTO question VALUES(628,'2020-12-19 16:23:32',replace('What are the two elements of OpsWorks?\n','\n',char(10)),replace('Stacks and Layers. Stacks = group of resouces.  Layers = context within stack, eg DB layer\n','\n',char(10)),'A');
+INSERT INTO question VALUES(629,'2020-12-19 16:23:32',replace('What pre-configured layers exist?\n','\n',char(10)),replace('Applications, Databases, Load Balancers, Caching\n','\n',char(10)),'A');
+INSERT INTO question VALUES(630,'2020-12-19 16:23:32',replace('What is IOT core?\n','\n',char(10)),replace('Allows you to harvest data from IOT devices.\n','\n',char(10)),'A');
 CREATE TABLE answer (
        answer_id integer primary key not null,
        question_id integer not null,
