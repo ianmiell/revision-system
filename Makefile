@@ -1,15 +1,16 @@
-clean: safe_clean init_db
-
 run: safe_clean init_db start save_state safe_clean
 
+clean: safe_clean init_db
+
 init_db:
-	cat db/db_export.sql | sqlite3 db/rs.db
+	cat db/db_export.sql | sqlite3 db/revision-system.db
 
 start:
 	echo 'start'
+	python3 src/main.py
 
 save_state:
-	echo ".dump" | sqlite3 db/rs.db > db/db_export.sql
+	echo ".dump" | sqlite3 db/revision-system.db > db/db_export.sql
 	git commit -am "saving state" || true
 	git pull --rebase -s recursive -X ours
 	git push
@@ -17,4 +18,4 @@ save_state:
 # Removes everything (tho we still have git history).
 # Removes data that is recreated with a make
 safe_clean:
-	rm -f db/rs.db
+	rm -f db/revision-system.db

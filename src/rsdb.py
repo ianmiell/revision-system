@@ -1,9 +1,8 @@
 import sqlite3
-import datetime
-import twitter_shared
+#import datetime
 
 def get_conn():
-	conn = sqlite3.connect('revision-system.db')
+	conn = sqlite3.connect('db/revision-system.db')
 	c = conn.cursor()
 	return conn, c
 
@@ -26,19 +25,35 @@ def fetchone(qry_str, args):
 	commit_and_close_conn(conn)
 	return result
 
-def get_categories():
+def get_tags():
 	conn, c = get_conn()
-	c.execute('select handle, num_followers, following_me from twitter_user where ignored = "N" and following_me = "Y" order by {0} desc'.format('num_followers'))
-	users = []
-	for user in c:
-		users.append(user)
+	c.execute('select tag_id, tag, notes, status from tag')
+	tags = []
+	for tags in c:
+		tags.append(tags)
 	commit_and_close_conn(conn)
-	return
+	return tags
 
-def add_question(question, answer, category):
+# TODO: handle dupe
+def add_tag(tag_text, notes, status='A'):
 	conn, c = get_conn()
-	c.execute('insert into question (question, answer) values(?, ?)', (question, answer))
+	c.execute('insert into tag (tag, notes, status) values(?, ?, ?)', (tag, notes, status))
+	# Get the id
+	tag_id = c.lastrowid
 	commit_and_close_conn(conn)
+	return True, tag_id
+
+# TODO: handle dupe
+def add_question(question, answer, category, tag_id):
+	conn, c = get_conn()
+	# Insert the question, then get the id
+	c.execute('insert into question (question, answer) values(?, ?)', (question, answer))
+	# Get the id
+	question_id = c.lastrowid
+	# Insert question_tag
+	c.execute('insert into question_tag (question_id, tag_id) values(?, ?)', (question_id, tag_id))
+	commit_and_close_conn(conn)
+	return True, question_id
 
 # Examples:
 #def get_following_me(user_id):

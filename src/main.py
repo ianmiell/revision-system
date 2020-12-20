@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import pick
 import qanda
+import tag
+import question
 
 def main():
 	# TODO: select subset of folders to look through
@@ -8,13 +10,15 @@ def main():
 	global nday_scan_days
 	global DEBUG
 	print('To add a question, go to /space/git/work/learning and follow the examples, check in and push')
-	options = ['qanda', 'revise', 'notes', 'popquiz', 'nday_scan', 'debug']
+	options = ['qanda', 'revise', 'notes', 'popquiz', 'nday_scan', 'debug', 'add_question', 'add_tag']
 	res = pick.pick(options, title='Choose (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
 	notes        = False
 	qanda        = False
 	revise       = False
 	pop          = False
 	nday_scan    = False
+	add_question = False
+	add_tag = False
 	for r in res:
 		if r[0] == 'notes':
 			notes = True
@@ -28,6 +32,10 @@ def main():
 			pop = True
 		elif r[0] == 'nday_scan':
 			nday_scan = True
+		elif r[0] == 'add_question':
+			add_question = True
+		elif r[0] == 'add_tag':
+			add_tag = True
 	if nday_scan:
 		nday_scan_days = input('Input number of days to look back at: ')
 	if pop:
@@ -41,6 +49,10 @@ def main():
 			qanda.run_qanda()
 		if revise:
 			run_revise(msg='Doing revise again. Hit return to continue')
+		if add_question:
+			question.add_question()
+		if add_tag:
+			tag.add_tag()
 
 # In debug mode?
 DEBUG=False
