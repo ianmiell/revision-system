@@ -6,20 +6,22 @@ This project uses spaced repetition to help you learn discrete facts for the kin
 
 ## Get Started
 
+Fork this repository, and clone it to your machine.
+
 Run:
 
 ```
-make
+./run
 ```
 
 To get going, and follow the instructions.
 
-After a question session, it's important to save state by quitting, using the menu.
+After a question session, it's important to save state by quitting, using the menu. This will save state back to the repository so it can be run again from anywhere else.
 
 If you exit unexpectedly and want to save state, run:
 
 ```
-make save_state
+./save
 ```
 
 ## How It Works
