@@ -13,6 +13,7 @@ def main():
 			{'action': 'revise',       'description': 'Revision questions'},
 			{'action': 'add_question', 'description': 'Add a question'},
 			{'action': 'add_tag',      'description': 'Add a tag'},
+			{'action': 'bulk_insert',  'description': 'Bulk insert question'},
 			{'action': 'quit',         'description': 'Quit'}
 		]
 		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description)
@@ -21,6 +22,7 @@ def main():
 		revise       = False
 		add_question = False
 		add_tag      = False
+		bulk_insert  = False
 		if action == 'qanda':
 			do_qanda = True
 		elif action == 'revise':
@@ -37,6 +39,8 @@ def main():
 			qanda.run_qanda()
 		if add_question:
 			question.add_question()
+		if bulk_insert:
+			question.bulk_insert()
 		if add_tag:
 			tag.add_tag()
 

@@ -3,7 +3,22 @@ import rsdb
 import tag
 import shared
 
+
 def add_question():
+	tag_ids_chosen = get_tag_ids_chosen()
+	while True:
+		# Get question
+		question = shared.ask('Please input question: ')
+		# Get answer
+		answer = shared.ask('Please input answer: ')
+		# Insert question, and tags
+		rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
+		do_continue = shared.ask_continue('Add another question with these tags (y/n)?')
+		if do_continue not in ('y','Y','YES','Yes'):
+			break
+
+
+def get_tag_ids_chosen():
 	tags = tag.get_tags()
 	res  = tag.choose_tags()
 	# Figure out which primary key ids were picked.
@@ -18,17 +33,22 @@ def add_question():
 	tag_chosen         = None
 	tag_indexes_chosen = None
 	tag_indexes_choice = None
+	return tag_ids_chosen
 
-	while True:
-		# Get question
-		question = shared.ask('Please input question: ')
-		# Get answer
-		answer = shared.ask('Please input answer: ')
-		# Insert question, and tags
-		rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
-		do_continue = shared.ask('Add another question with these tags (y/n)?')
-		if do_continue not in ('y','Y','YES','Yes'):
-			break
+
+def bulk_insert():
+	tag_ids_chosen = get_tag_ids_chosen()
+	filename = shared.ask('Please input filename: ')
+	try:
+		for line in open(filename, 'r').readlines():
+			if line[:2] == 'Q:':
+				question = line[3:]
+			if line[:2] == 'A:':
+				answer = line[3:]
+				rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
+				print('Added: ' + question + ' with answer: ' + answer)
+	except:
+		print('There was a problem')
 
 
 if __name__ == '__main__':
