@@ -5,13 +5,15 @@ import shared
 
 def add_question():
 
-	res = tag.choose_tags()
+	tags = tag.get_tags()
+	res  = tag.choose_tags()
 	# Figure out which primary key ids were picked.
-	tag_ids_chosen = set()
+	tag_ids_chosen     = set()
 	tag_indexes_chosen = set()
 	# Get the choices made from the index of choices
 	for tag_chosen in res:
 		tag_indexes_chosen.add(tag_chosen[1])
+	print(tag_indexes_chosen)
 	# Get the actual primary key ids from the choices made
 	for tag_indexes_choice in tag_indexes_chosen:
 		tag_ids_chosen.add(tags[tag_indexes_choice][0])
