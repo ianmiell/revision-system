@@ -18,7 +18,7 @@ def main():
 			{'action': 'review',       'description': 'Review questions'},
 			{'action': 'quit',         'description': 'Save state and quit'}
 		]
-		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description, min_selection_count=1)
+		res = pick.pick(options, title='Main Menu. Enter to choose an option: ', indicator='=>', options_map_func=shared.get_option_description, min_selection_count=1)
 		action = res[0].get('action')
 		do_qanda     = False
 		revise       = False
