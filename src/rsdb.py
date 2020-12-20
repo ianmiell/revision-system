@@ -56,6 +56,23 @@ def add_question(question, answer, tag_ids):
 	commit_and_close_conn(conn)
 	return True, question_id
 
+def get_related_questions(tag_ids, status=None):
+	conn, c = get_conn()
+	conn.row_factory = sqlite3.Row
+	# By default, active questions only.
+	if status is None:
+		status = 'A'
+	questions = set()
+	for tag_id in tag_ids:
+		if status is not None:
+			while(True):
+				print(c.execute('select question_id, date(date_added), question, answer from question_tag where tag_id = ? and status = ?', (tag_id,status).fetchone())
+		for row in c:
+			questions.add([c[0],c[1]))
+	print(questions)
+	return questions
+
+
 # Examples:
 #def get_following_me(user_id):
 #	result = fetchone('select following_me from twitter_user where user_id = ?', (user_id,))

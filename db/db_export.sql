@@ -18,6 +18,8 @@ CREATE TABLE question_tag (
 );
 INSERT INTO question_tag VALUES(1,1);
 INSERT INTO question_tag VALUES(1,2);
+INSERT INTO question_tag VALUES(2,1);
+INSERT INTO question_tag VALUES(2,2);
 CREATE TABLE question (
        question_id integer primary key not null,
        date_added integer default current_timestamp not null,
@@ -27,6 +29,7 @@ CREATE TABLE question (
        unique(question)
 );
 INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s virtual compute service.','A');
+INSERT INTO question VALUES(2,'2020-12-16 16:46:21','What is RDS?','Amazon''s virtual relational database service.','A');
 CREATE TABLE answer (
        answer_id integer primary key not null,
        question_id integer not null,

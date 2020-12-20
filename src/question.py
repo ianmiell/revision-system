@@ -22,7 +22,6 @@ def add_question():
 	# Get the actual primary key ids from the choices made
 	for tag_indexes_choice in tag_indexes_chosen:
 		tag_ids_chosen.add(tags[tag_indexes_choice][0])
-	print(tag_indexes_choice)
 	tag_chosen         = None
 	tag_indexes_chosen = None
 	tag_indexes_choice = None
