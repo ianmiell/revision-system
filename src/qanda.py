@@ -242,23 +242,28 @@ def review_questions():
 		elif question_status == 'I':
 			options.append({'action': 'active',   'description': 'Make question active'})
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
-		res = pick.pick(options, title, multi_select=False, indicator='=>', options_map_func=shared.get_option_description)
-		action = res[0].get('action')
-		if action == 'do_nothing':
-			continue
-		elif action == 'finish':
-			break
-		elif action == 'inactive':
-			rsdb.update_question_status(question_id, 'I')
-		elif action == 'revise':
-			rsdb.update_question_status(question_id, 'R')
-		elif action == 'tag':
-			result, tag_ids = question.choose_tags()
-			if not result:
+		while True:
+			res = pick.pick(options, title, multi_select=False, indicator='=>', options_map_func=shared.get_option_description)
+			action = res[0].get('action')
+			if action == 'do_nothing':
+				break
+			elif action == 'finish':
+				return True
+			elif action == 'inactive':
+				rsdb.update_question_status(question_id, 'I')
+				break
+			elif action == 'revise':
+				rsdb.update_question_status(question_id, 'R')
+				break
+			elif action == 'tag':
+				result, tag_ids = question.choose_tags()
+				if not result:
+					continue
+				rsdb.add_question_tags(question_id, tag_ids)
+				break
+			elif action == 'history':
+				get_question_history(question_id)
 				continue
-			rsdb.add_question_tags(question_id, tag_ids)
-		elif action == 'history':
-			get_question_history(question_id)
 	return True
 
 
