@@ -212,6 +212,8 @@ def review_questions():
 	# Choose tags
 	tag_ids             = question.choose_tags()
 	tagged_question_ids = get_tagged_questions(tag_ids)
+	# Shuffle questions
+	random.shuffle(tagged_question_ids)
 	for question_id in tagged_question_ids:
 		question_string, answer, question_status = get_question(question_id)
 		status_description = get_status(question_status)
@@ -260,10 +262,24 @@ def get_question(question_id):
 def get_question_history(question_id):
 	shared.clear_screen()
 	print('Question history: ')
-	date_added, answers = rsdb.get_question_history(question_id)
-	print('Question added on: ' + date_added)
-	print(answers)
-	shared.page('\nEnter to return')
+	date_added, question, answer, answers = rsdb.get_question_history(question_id)
+	print('\nQuestion: ' + question)
+	print('\nAnswer: ' + answer)
+	print('\nQuestion added on: ' + date_added + '\n')
+	if not answers:
+		print('This question has not been answered yet.\n')
+	for answer in answers:
+		time   = answer[0]
+		result = answer[1]
+		if result == 'R':
+			result = 'correctly'
+		elif result == 'W':
+			result = 'wrongly'
+		else:
+			print('result was: ' + result + ', this is a bug')
+			sys.exit(1)
+		print('At ' + time + ' you answered this question ' + result + '.')
+	shared.page()
 
 
 def get_days():

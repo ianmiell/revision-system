@@ -116,13 +116,16 @@ def get_question(question_id):
 
 def get_question_history(question_id):
 	conn, c = get_conn()
-	c.execute('select date_added from question where question_id = ?',(question_id,))
-	date_added = c.fetchone()[0]
+	c.execute('select date_added, question, answer from question where question_id = ?',(question_id,))
+	res = c.fetchone()
+	date_added = res[0]
+	question   = res[1]
+	answer     = res[2]
 	answers = list()
-	for answer in c.execute('select date_answered, result from answer where question_id = ?',(question_id,)):
-		answers.append(answers)
+	for row in c.execute('select date_answered, result from answer where question_id = ?',(question_id,)):
+		answers.append(row)
 	commit_and_close_conn(conn)
-	return date_added, answers
+	return date_added, question, answer, answers
 
 
 def insert_answer(question_id, result):

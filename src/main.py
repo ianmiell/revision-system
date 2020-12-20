@@ -52,8 +52,9 @@ def main():
 			tag.add_tag()
 		if review:
 			qanda.review_questions()
-		print('Completed cycle, starting again - remember to save state at the end of the session.')
-		time.sleep(3)
+		shared.clear_screen()
+		print('\n\nCompleted cycle, starting again - remember to save state at the end of the session.\n')
+		shared.page()
 
 
 if __name__ == '__main__':
