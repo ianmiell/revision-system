@@ -1,3 +1,4 @@
+import pick
 import rsdb
 import shared
 
@@ -23,6 +24,15 @@ def print_tags(tags):
 	for tag in tags:
 		print(str(tag[0]) + ': ' + tag[1])
 	print('')
+
+def choose_tags():
+	# Get tags
+	tags = get_tags()
+	# Pick tags
+	options = []
+	[ options.append(x[1]) for x in tags ]
+	res = pick.pick(options, title='Choose (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
+	return res
 
 if __name__ == '__main__':
     add_tag()

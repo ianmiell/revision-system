@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 def page(msg='[Hit enter to continue]'):
-	if msg != '':
-		print(msg)
 	return ask(msg)
 
 def debug(text):

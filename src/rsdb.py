@@ -57,79 +57,26 @@ def add_question(question, answer, tag_ids):
 	return True, question_id
 
 def get_related_questions(tag_ids, status=None):
-	conn, c = get_conn()
-	conn.row_factory = sqlite3.Row
 	# By default, active questions only.
+	conn, c = get_conn()
 	if status is None:
 		status = 'A'
 	questions = set()
 	for tag_id in tag_ids:
-		if status is not None:
-			while(True):
-				print(c.execute('select question_id, date(date_added), question, answer from question_tag where tag_id = ? and status = ?', (tag_id,status).fetchone())
-		for row in c:
-			questions.add([c[0],c[1]))
-	print(questions)
-	return questions
+		for row in c.execute('select question_id from question_tag where tag_id = ?', (tag_id,)):
+			questions.add(row[0])
+	commit_and_close_conn(conn)
+	return list(questions)
+
+def get_question_age(question_id):
+	conn, c = get_conn()
+	c.execute(r'''select (strftime('%s','now') - strftime('%s',date_added)) / 60 / 60 / 24 from question where question_id = ?''', (question_id,))
+	age = c.fetchone()[0]
+	commit_and_close_conn(conn)
+	return age
 
 
-# Examples:
-#def get_following_me(user_id):
-#	result = fetchone('select following_me from twitter_user where user_id = ?', (user_id,))
-#	following_me = result[0]
-#	return following_me
+if __name__ == '__main__':
+	#
+	print(get_question_age(1))
 
-#def update_following_me(user_id, to):
-#	run_qry('update twitter_user set following_me = ? where user_id = ?', (to, user_id))
-
-#def get_top_followers():
-#	conn, c = get_conn()
-#	c.execute('select handle, num_followers, following_me from twitter_user where ignored = "N" and following_me = "Y" order by {0} desc'.format('num_followers'))
-#	users = []
-#	for user in c:
-#		users.append(user)
-#	commit_and_close_conn(conn)
-#	return users
-
-#def is_user_in_system(user_id):
-#	conn, c = get_conn()
-#	numrows = -1
-#	qry = "select count(1) from twitter_user where user_id = ?"
-#	twitter_shared.myprint('qry: ' + qry + ' user: ' + str(user_id), loglevel=10)
-#	c.execute(qry, (user_id,))
-#	result = c.fetchone()
-#	numrows = result[0]
-#	commit_and_close_conn(conn)
-#	return numrows > 0
-
-#def insert_or_update_user(user_id, screen_name=None, followers_count=None, following_me='N', last_active=-1, following=None):
-#	conn, c = get_conn()
-#	numrows = -1
-#	c.execute('select count(1) from twitter_user where user_id = ?', (user_id,))
-#	result = c.fetchone()
-#	# Passing these in as 'None' means 'update if a row is found, as we want to ignore this for a while', eg if it's blocked us.
-#	if screen_name is None and followers_count is None:
-#		if len(result) != 0:
-#			conn, c = get_conn()
-#			if following is None:
-#				c.execute('update twitter_user set last_updated = ? where user_id = ?', (datetime.datetime.now(), user_id))
-#			else:
-#				c.execute('update twitter_user set last_updated = ?, following = ? where user_id = ?', (datetime.datetime.now(), following, user_id))
-#			commit_and_close_conn(conn)
-#		return
-#	numrows = result[0]
-#	commit_and_close_conn(conn)
-#	if numrows == 0:
-#		conn, c = get_conn()
-#		if following is None:
-#			c.execute('insert into twitter_user (user_id, handle, num_followers, following_me, last_active) values(?, ?, ?, ?, ?)', (user_id, screen_name, followers_count, following_me, last_active))
-#		else:
-#			c.execute('insert into twitter_user (user_id, handle, num_followers, following_me, last_active, following) values(?, ?, ?, ?, ?, ?)', (user_id, screen_name, followers_count, following_me, last_active, following))
-#		commit_and_close_conn(conn)
-#	elif numrows == 1:
-#		conn, c = get_conn()
-#		if following is None:
-#			c.execute('update twitter_user set handle = ?, num_followers = ?, last_updated = ?, last_active = ? where user_id = ?', (screen_name, followers_count, datetime.datetime.now(), last_active, user_id))
-#		else:
-#			c.execute('update twitter_user set handle = ?, num_followers = ?, last_updated = ?, last_active = ?, following = ? where user_id = ?', (screen_name, followers_count, datetime.datetime.now(), last_active, following, user_id))
-#		commit_and_close_conn(conn)

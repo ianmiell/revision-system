@@ -25,7 +25,7 @@ CREATE TABLE question (
        date_added integer default current_timestamp not null,
        question text not null,
        answer text not null,
-       status text default 'A' not null check (status = 'A' or status = 'I'),
+       status text default 'A' not null check (status = 'A' or status = 'I' or status = 'R'),
        unique(question)
 );
 INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s virtual compute service.','A');

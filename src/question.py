@@ -4,15 +4,8 @@ import tag
 import shared
 
 def add_question():
-	# Get tags
-	tags = tag.get_tags()
-	tag.print_tags(tags)
 
-	# Pick tags
-	options = []
-	[ options.append(x[1]) for x in tags ]
-	res = pick.pick(options, title='Choose (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
-
+	res = tag.choose_tags()
 	# Figure out which primary key ids were picked.
 	tag_ids_chosen = set()
 	tag_indexes_chosen = set()

@@ -12,7 +12,7 @@ def main():
 	options = ['qanda', 'revise', 'debug', 'add_question', 'add_tag']
 	res = pick.pick(options, title='Choose (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
 	#notes        = False
-	qanda        = False
+	do_qanda        = False
 	revise       = False
 	add_question = False
 	add_tag = False
@@ -22,7 +22,7 @@ def main():
 		if r[0] == 'debug':
 			shared.DEBUG = True
 		elif r[0] == 'qanda':
-			qanda = True
+			do_qanda = True
 		elif r[0] == 'revise':
 			revise = True
 		elif r[0] == 'add_question':
@@ -31,7 +31,7 @@ def main():
 			add_tag = True
 	if revise:
 		run_revise()
-	if qanda:
+	if do_qanda:
 		qanda.run_qanda()
 	if revise:
 		run_revise(msg='Doing revise again. Hit return to continue')
