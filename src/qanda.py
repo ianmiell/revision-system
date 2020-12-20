@@ -63,7 +63,6 @@ def ask_questions(question_ids):
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
 		picked_list = pick.pick(options, title, multi_select=True, indicator='=>', options_map_func=shared.get_option_description)
 		for picked in picked_list:
-			print(picked)
 			action = picked[0].get('action')
 			if action == 'right':
 				rsdb.insert_answer(question_id, 'R')
