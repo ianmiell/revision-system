@@ -8,6 +8,7 @@ def get_tags():
 
 
 def ask_add_tag():
+	shared.clear_screen()
 	tags = get_tags()
 	print_tags(tags)
 	tag_to_add = ''
@@ -34,12 +35,13 @@ def print_tags(tags):
 
 
 def choose_tags():
+	shared.clear_screen()
 	# Get tags
 	tags = get_tags()
 	# Pick tags
 	options = []
 	[ options.append(x[1]) for x in tags ]
-	res = pick.pick(options, title='Choose (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
+	res = pick.pick(options, title='Choose tags (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
 	assert isinstance(res, list)
 	for item in res:
 		assert isinstance(item, tuple)

@@ -2,6 +2,7 @@
 import os
 import random
 import pick
+import time
 import rsdb
 import shared
 import tag
@@ -10,6 +11,7 @@ import question
 
 # Q&A - looks through learning folder for asciidoc files
 def run_qanda():
+	shared.clear_screen()
 	days = get_days()
 
 	question_ids        = set()
@@ -57,6 +59,7 @@ def run_qanda():
 
 
 def run_revise():
+	shared.clear_screen()
 	question_ids        = set()
 	tagged_question_ids = set()
 	tag_ids             = []
@@ -74,11 +77,8 @@ def run_revise():
 	question_ids = None
 
 
-
-
-
-
 def ask_questions(question_ids):
+	shared.clear_screen()
 	assert isinstance(question_ids, list)
 	num_questions           = len(question_ids)
 	num_questions_remaining = num_questions
@@ -175,6 +175,7 @@ def ask_questions(question_ids):
 
 
 def review_questions():
+	shared.clear_screen()
 	# Choose tags
 	tag_ids             = question.choose_tags()
 	tagged_question_ids = get_tagged_questions(tag_ids)

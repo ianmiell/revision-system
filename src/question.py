@@ -1,14 +1,14 @@
-import pick
 import rsdb
 import tag
 import shared
 
 
 def add_question():
+	shared.clear_screen()
 	tag_ids_chosen = choose_tags()
 	while True:
 		# Get question
-		question = shared.ask('Please input question: ')
+		question = shared.ask('Please input question to add: ')
 		# Get answer
 		answer = shared.ask('Please input answer: ')
 		# Insert question, and tags
