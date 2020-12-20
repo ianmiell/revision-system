@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import random
+import sys
 import pick
 import time
 import rsdb
@@ -142,9 +143,9 @@ def ask_questions(question_ids):
 				if action == 'quit':
 					quit     = True
 				if action == 'revise':
-					quit     = True
+					revise   = True
 				if action == 'right':
-					quit     = True
+					right    = True
 				if action == 'wrong':
 					wrong    = True
 			# Checks
