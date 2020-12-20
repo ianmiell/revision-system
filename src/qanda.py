@@ -5,6 +5,7 @@ import pick
 import rsdb
 import shared
 import tag
+import question
 
 
 # Q&A - looks through learning folder for asciidoc files
@@ -17,8 +18,8 @@ def run_qanda():
 	tag_ids             = []
 
 	# Choose tags, get related questions
-	tag_tuples          = tag.choose_tags()
-	tagged_question_ids = get_tagged_questions(tag_tuples)
+	tag_set             = tag.choose_tags()
+	tagged_question_ids = get_tagged_questions(tag_set)
 
 	for question_id in tagged_question_ids:
 		# How many days old is the question?
@@ -79,15 +80,16 @@ def ask_questions(question_ids):
 
 def review_questions():
 	# Choose tags
-	tag_tuples = tag.choose_tags()
-	tagged_question_ids = get_tagged_questions(tag_tuples)
+	tag_set             = question.get_tag_ids_chosen()
+	tagged_question_ids = get_tagged_questions(tag_set)
 	for question_id in tagged_question_ids:
-		question, answer, question_status = get_question(question_id)
+		question_string, answer, question_status = get_question(question_id)
 		status_description = get_status(question_status)
-		title = 'Question:\n\n\t' + question + '\n\n\t' + answer + '\n\nCurrent status: ' + status_description + '\n\nENTER to choose, UP/DOWN to move'
+		title = 'Question:\n\n\t' + question_string + '\n\nAnswer:\n\n\t' + answer + '\n\nCurrent status: ' + status_description + '\n\nENTER to choose, UP/DOWN to move'
 		options = [
 			{'action': 'do_nothing', 'description': 'Do nothing'},
-			{'action': 'inactive', 'description': 'Do not ask again'},
+			{'action': 'inactive',   'description': 'Do not ask again'},
+			{'action': 'finish',     'description': 'Finish review'},
 		]
 		if question_status == 'R':
 			options.append({'action': 'active',   'description': 'Make question active'})
@@ -99,6 +101,15 @@ def review_questions():
 			options.append({'action': 'active',   'description': 'Make question active'})
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
 		res = pick.pick(options, title, multi_select=False, indicator='=>', options_map_func=shared.get_option_description)
+		action = res[0].get('action')
+		if action == 'do_nothing':
+			continue
+		elif action == 'finish':
+			break
+		elif action == 'inactive':
+			rsdb.update_question_status(question_id, 'I')
+		elif action == 'revise':
+			rsdb.update_question_status(question_id, 'R')
 
 
 def get_question(question_id):
@@ -128,10 +139,9 @@ def get_status(status):
 		return 'Active'
 
 
-def get_tagged_questions(tag_tuples):
-	tag_ids = []
-	for tag_tuple in tag_tuples:
-		tag_ids.append(tag_tuple[1])
+def get_tagged_questions(tag_set):
+	assert isinstance(tag_set, set)
+	tag_ids = list(tag_set)
 	# Get related questions
 	tagged_question_ids = rsdb.get_related_questions(tag_ids)
 	assert isinstance(tagged_question_ids, list)

@@ -15,7 +15,8 @@ def main():
 			{'action': 'add_question', 'description': 'Add a question'},
 			{'action': 'add_tag',      'description': 'Add a tag'},
 			{'action': 'bulk_insert',  'description': 'Bulk insert question'},
-			{'action': 'quit',         'description': 'Quit'}
+			{'action': 'review',       'description': 'Review questions'},
+			{'action': 'quit',         'description': 'Save state and quit'}
 		]
 		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description, min_selection_count=1)
 		action = res[0].get('action')
@@ -24,6 +25,7 @@ def main():
 		add_question = False
 		add_tag      = False
 		bulk_insert  = False
+		review       = False
 		if action == 'qanda':
 			do_qanda = True
 		elif action == 'revise':
@@ -34,6 +36,8 @@ def main():
 			add_tag = True
 		elif action == 'bulk_insert':
 			bulk_insert = True
+		elif action == 'review':
+			review = True
 		elif action == 'quit':
 			sys.exit()
 		if revise:
@@ -46,7 +50,10 @@ def main():
 			question.bulk_insert()
 		if add_tag:
 			tag.add_tag()
-		time.sleep(2)
+		if review:
+			qanda.review_questions()
+		print('Completed cycle, starting again - remember to save state at the end of the session.')
+		time.sleep(3)
 
 
 if __name__ == '__main__':

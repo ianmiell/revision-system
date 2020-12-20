@@ -1875,7 +1875,7 @@ INSERT INTO question VALUES(608,'2020-12-19 16:21:12',replace('What are the item
 INSERT INTO question VALUES(609,'2020-12-19 16:21:12',replace('How do you get your Windows Admin Password?\n','\n',char(10)),replace('You put in the key .pem file into a dialog on the dashboard, and the password is given to you.\n','\n',char(10)),'A');
 INSERT INTO question VALUES(610,'2020-12-19 16:23:32',replace('What is Cloud Sight?\n','\n',char(10)),replace('Image recognition API\n','\n',char(10)),'A');
 INSERT INTO question VALUES(611,'2020-12-19 16:23:32',replace('What is Code Commit?\n','\n',char(10)),replace('AWS''s version of GitHub\n','\n',char(10)),'A');
-INSERT INTO question VALUES(612,'2020-12-19 16:23:32',replace('What is Code Deploy?\n','\n',char(10)),replace('Automates code deployment to Amazon instances\n','\n',char(10)),'A');
+INSERT INTO question VALUES(612,'2020-12-19 16:23:32',replace('What is Code Deploy?\n','\n',char(10)),replace('Automates code deployment to Amazon instances\n','\n',char(10)),'I');
 INSERT INTO question VALUES(613,'2020-12-19 16:23:32',replace('What is code pipeline?\n','\n',char(10)),replace('Builds test and deploys code on changes\n','\n',char(10)),'A');
 INSERT INTO question VALUES(614,'2020-12-19 16:23:32',replace('What is device farm?\n','\n',char(10)),replace('Device simulation\n','\n',char(10)),'A');
 INSERT INTO question VALUES(615,'2020-12-19 16:23:32',replace('What is workdocs?\n','\n',char(10)),replace('Document store for enterprises\n','\n',char(10)),'A');

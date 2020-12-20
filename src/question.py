@@ -36,10 +36,10 @@ def get_tag_ids_chosen():
 	return tag_ids_chosen
 
 
+# This option exists for deprecated question files in old version of this application.
 def bulk_insert():
 	tag_ids_chosen = get_tag_ids_chosen()
 	filename = shared.ask('\n\nPlease input filename: ')
-	#try:
 	for line in open(filename, 'r').readlines():
 		print(line)
 		if line[:2] == 'Q:' or line[:2] == 'q:':
@@ -48,8 +48,6 @@ def bulk_insert():
 			answer = line[3:]
 			rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
 			print('Added: ' + question + ' with answer: ' + answer)
-	#except:
-	#	print('There was a problem')
 
 
 if __name__ == '__main__':
