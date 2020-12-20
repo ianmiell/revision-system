@@ -133,6 +133,14 @@ def update_answer(question_id, answer):
 	run_qry('''update question set answer = ? where question_id = ?''', (answer, question_id))
 
 
+def delete_question(question_id):
+	conn, c = get_conn()
+	run_qry('''delete from question_tag where question_id = ?''', (question_id,))
+	run_qry('''delete from answer where question_id = ?''', (question_id,))
+	run_qry('''delete from question where question_id = ?''', (question_id,))
+	commit_and_close_conn(conn)
+
+
 if __name__ == '__main__':
 	#
 	print(get_question_age(1))

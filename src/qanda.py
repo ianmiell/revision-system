@@ -98,6 +98,7 @@ def ask_questions(question_ids):
 			{'action': 'right',    'description': 'I got that right'},
 			{'action': 'wrong',    'description': 'I got that wrong'},
 			{'action': 'edit',     'description': 'Edit question'},
+			{'action': 'delete',   'description': 'Permanently delete question'},
 			{'action': 'done',     'description': 'Return to main menu'},
 			{'action': 'quit',     'description': 'Quit and save state'},
 			{'action': 'nothing',  'description': 'Do nothing'},
@@ -114,6 +115,7 @@ def ask_questions(question_ids):
 		while True:
 			picked_list = pick.pick(options, title, multi_select=True, indicator='x', options_map_func=shared.get_option_description)
 			active   = False
+			delete    = False
 			done     = False
 			edit     = False
 			inactive = False
@@ -127,6 +129,8 @@ def ask_questions(question_ids):
 				action = picked[0].get('action')
 				if action == 'active':
 					quit     = True
+				if action == 'delete':
+					delete   = True
 				if action == 'done':
 					done     = True
 				if action == 'edit':
@@ -148,12 +152,12 @@ def ask_questions(question_ids):
 				print('Cannot be right and wrong!')
 				time.sleep(3)
 				continue
-			if not right and not wrong and not nothing and not done and not quit:
+			if not right and not wrong and not nothing and not done and not quit and not delete:
 				print('Must be right or wrong!')
 				time.sleep(3)
 				continue
-			if (right or wrong or active or inactive or revise or edit) and nothing:
-				print('Cannot do nothing and be right or wrong!')
+			if (right or wrong or active or inactive or revise or edit) and (nothing or delete):
+				print('Cannot do nothing or delete, and be right, wrong, active, or inactive!')
 				time.sleep(3)
 				continue
 			if (active and inactive) or (inactive and revise) or (active and revise):
@@ -173,6 +177,8 @@ def ask_questions(question_ids):
 				rsdb.update_question_status(question_id, 'R')
 			if action == 'edit':
 				edit_question(question_id, question, answer)
+			if action == 'delete':
+				rsdb.delete_question(question_id)
 			if action == 'done':
 				return
 			if action == 'quit':
