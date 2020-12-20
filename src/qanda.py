@@ -129,7 +129,7 @@ def ask_questions(question_ids):
 			for picked in picked_list:
 				action = picked[0].get('action')
 				if action == 'active':
-					active    = True
+					active   = True
 				if action == 'delete':
 					delete   = True
 				if action == 'done':
