@@ -116,7 +116,7 @@ def ask_questions(question_ids):
 		while True:
 			picked_list = pick.pick(options, title, multi_select=True, indicator='x', options_map_func=shared.get_option_description)
 			active   = False
-			delete    = False
+			delete   = False
 			done     = False
 			edit     = False
 			inactive = False
@@ -148,6 +148,7 @@ def ask_questions(question_ids):
 					right    = True
 				if action == 'wrong':
 					wrong    = True
+			print(quit)
 			# Checks
 			if right and wrong:
 				print('Cannot be right and wrong!')
