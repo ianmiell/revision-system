@@ -16,24 +16,21 @@ def main():
 			{'action': 'quit',         'description': 'Quit'}
 		]
 		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description)
+		action = res[0].get('action')
 		do_qanda     = False
 		revise       = False
 		add_question = False
 		add_tag      = False
-		for r in res:
-			print(r)
+		if action == 'qanda':
+			do_qanda = True
+		elif action == 'revise':
+			revise = True
+		elif action == 'add_question':
+			add_question = True
+		elif action == 'add_tag':
+			add_tag = True
+		elif action == 'quit':
 			sys.exit()
-			action = r.get('action')
-			if action == 'qanda':
-				do_qanda = True
-			elif action == 'revise':
-				revise = True
-			elif action == 'add_question':
-				add_question = True
-			elif action == 'add_tag':
-				add_tag = True
-			elif action == 'quit':
-				sys.exit()
 		if revise:
 			run_revise()
 		if do_qanda:

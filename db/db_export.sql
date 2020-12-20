@@ -28,8 +28,8 @@ CREATE TABLE question (
        status text default 'A' not null check (status = 'A' or status = 'I'),
        unique(question)
 );
-INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s virtual compute service.','A');
-INSERT INTO question VALUES(2,'2020-12-16 16:46:21','What is RDS?','Amazon''s virtual relational database service.','A');
+INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s virtual compute service.','I');
+INSERT INTO question VALUES(2,'2020-12-16 16:46:21','What is RDS?','Amazon''s virtual relational database service.','I');
 CREATE TABLE answer (
        answer_id integer primary key not null,
        question_id integer not null,
@@ -43,4 +43,6 @@ INSERT INTO answer VALUES(3,1,'2020-12-19 11:46:03','R');
 INSERT INTO answer VALUES(4,2,'2020-12-19 11:46:06','R');
 INSERT INTO answer VALUES(5,1,'2020-12-19 11:48:58','R');
 INSERT INTO answer VALUES(6,2,'2020-12-19 11:49:06','R');
+INSERT INTO answer VALUES(7,1,'2020-12-19 12:07:56','W');
+INSERT INTO answer VALUES(8,2,'2020-12-19 12:08:00','W');
 COMMIT;
