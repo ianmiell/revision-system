@@ -23,6 +23,7 @@ CREATE TABLE question (
        answer text not null,
        unique(question)
 );
+INSERT INTO question VALUES(1,'2020-12-13 10:35:32','A','B');
 CREATE TABLE question_status (
        question_id integer primary key not null,
        date_added integer default current_timestamp not null,
