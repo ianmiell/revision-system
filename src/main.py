@@ -38,7 +38,7 @@ def main():
 		if notes:
 			run_notes()
 		if qanda:
-			run_qanda()
+			qanda.run_qanda()
 		if revise:
 			run_revise(msg='Doing revise again. Hit return to continue')
 
