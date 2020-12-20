@@ -1,0 +1,7 @@
+colorit==0.1.0
+pick==1.0.0
+pip==20.3.1
+pycairo==1.20.0
+PyGObject==3.38.0
+setuptools==51.0.0
+wheel==0.36.1

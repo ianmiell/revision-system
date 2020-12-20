@@ -78,28 +78,29 @@ def run_revise():
 
 
 def ask_questions(question_ids):
-	shared.clear_screen()
 	assert isinstance(question_ids, list)
 	num_questions           = len(question_ids)
 	num_questions_remaining = num_questions
+	num_questions_asked     = 0
 	# Shuffle questions
 	random.shuffle(question_ids)
 	for question_id in question_ids:
+		num_questions_remaining -= 1
+		num_questions_asked     += 1
 		question, answer, question_status = get_question(question_id)
 		# Ask question
-		shared.page('Q: ' + question)
+		shared.clear_screen()
+		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question))
 		# Give answer
-		shared.page('A: ' + answer)
+		shared.page('\tA: ' + shared.hash_color_string(answer))
 		title = 'Your answer to question:\n\n\t' + question + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move'
-		# TODO: Edit question
-		# TODO: Edit answer
 		options = [
-			{'action': 'wrong',    'description': 'I got that wrong'},
 			{'action': 'right',    'description': 'I got that right'},
-			{'action': 'nothing',  'description': 'Do nothing'},
+			{'action': 'wrong',    'description': 'I got that wrong'},
 			{'action': 'edit',     'description': 'Edit question'},
 			{'action': 'done',     'description': 'Return to main menu'},
 			{'action': 'quit',     'description': 'Quit and save state'},
+			{'action': 'nothing',  'description': 'Do nothing'},
 		]
 		if question_status == 'R':
 			options.append({'action': 'active',   'description': 'Take out of revise mode'})
@@ -196,6 +197,7 @@ def edit_question(question_id, question, answer):
 		rsdb.update_answer(new_answer, question_id)
 		print('\n\nAnswer updated\n\n')
 	time.sleep(3)
+	shared.clear_screen()
 
 
 def review_questions():
