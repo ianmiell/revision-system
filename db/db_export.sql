@@ -82,4 +82,10 @@ CREATE TABLE answer (
        result text not null check (result = 'R' or result = 'W'),
        foreign key(question_id) references question(question_id)
 );
+INSERT INTO answer VALUES(1,8,'2020-12-20 16:49:32','R');
+INSERT INTO answer VALUES(2,4,'2020-12-20 16:49:37','R');
+INSERT INTO answer VALUES(3,5,'2020-12-20 16:49:46','R');
+INSERT INTO answer VALUES(4,9,'2020-12-20 16:49:55','W');
+INSERT INTO answer VALUES(5,3,'2020-12-20 16:50:01','R');
+INSERT INTO answer VALUES(6,6,'2020-12-20 16:50:04','R');
 COMMIT;

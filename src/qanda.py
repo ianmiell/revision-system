@@ -153,7 +153,7 @@ def ask_questions(question_ids):
 				print('Cannot be right and wrong!')
 				time.sleep(3)
 				continue
-			if not right and not wrong and not nothing and not done and not quit and not delete:
+			if not right and not wrong and not delete and not done and not edit and not inactive and not nothing and not quit and not revise:
 				print('Must be right or wrong!')
 				time.sleep(3)
 				continue
@@ -219,6 +219,7 @@ def review_questions():
 		options = [
 			{'action': 'do_nothing', 'description': 'Do nothing'},
 			{'action': 'inactive',   'description': 'Do not ask again'},
+			{'action': 'history',    'description': 'Show question history'},
 			{'action': 'tag',        'description': 'Tag question'},
 			{'action': 'finish',     'description': 'Finish review'},
 		]
@@ -244,6 +245,8 @@ def review_questions():
 		elif action == 'tag':
 			tag_ids = question.choose_tags()
 			rsdb.add_question_tags(question_id, tag_ids)
+		elif action == 'history':
+			get_question_history(question_id)
 
 
 def get_question(question_id):
@@ -252,6 +255,15 @@ def get_question(question_id):
 	answer          = question_res[2]
 	question_status = question_res[3]
 	return question, answer, question_status
+
+
+def get_question_history(question_id):
+	shared.clear_screen()
+	print('Question history: ')
+	date_added, answers = rsdb.get_question_history(question_id)
+	print('Question added on: ' + date_added)
+	print(answers)
+	shared.page('\nEnter to return')
 
 
 def get_days():
