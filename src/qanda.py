@@ -114,7 +114,7 @@ def ask_questions(question_ids):
 			options.append({'action': 'active',   'description': 'Take out of revise mode'})
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
 		while True:
-			picked_list = pick.pick(options, title, multi_select=True, indicator='x', options_map_func=shared.get_option_description)
+			picked_list = pick.pick(options, title, multi_select=True, indicator='x', min_selection_count=1, options_map_func=shared.get_option_description)
 			active   = False
 			delete   = False
 			done     = False
@@ -129,13 +129,13 @@ def ask_questions(question_ids):
 			for picked in picked_list:
 				action = picked[0].get('action')
 				if action == 'active':
-					quit     = True
+					active    = True
 				if action == 'delete':
 					delete   = True
 				if action == 'done':
 					done     = True
 				if action == 'edit':
-					done     = True
+					edit     = True
 				if action == 'inactive':
 					inactive = True
 				if action == 'nothing':
@@ -148,7 +148,6 @@ def ask_questions(question_ids):
 					right    = True
 				if action == 'wrong':
 					wrong    = True
-			print(quit)
 			# Checks
 			if right and wrong:
 				print('Cannot be right and wrong!')
