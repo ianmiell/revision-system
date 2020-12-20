@@ -97,6 +97,7 @@ def ask_questions(question_ids):
 			{'action': 'wrong',    'description': 'I got that wrong'},
 			{'action': 'right',    'description': 'I got that right'},
 			{'action': 'nothing',  'description': 'Do nothing'},
+			{'action': 'edit',     'description': 'Edit question'},
 			{'action': 'done',     'description': 'Return to main menu'},
 			{'action': 'quit',     'description': 'Quit and save state'},
 		]
@@ -113,6 +114,7 @@ def ask_questions(question_ids):
 			picked_list = pick.pick(options, title, multi_select=True, indicator='x', options_map_func=shared.get_option_description)
 			active   = False
 			done     = False
+			edit     = False
 			inactive = False
 			nothing  = False
 			quit     = False
@@ -125,6 +127,8 @@ def ask_questions(question_ids):
 				if action == 'active':
 					quit     = True
 				if action == 'done':
+					done     = True
+				if action == 'edit':
 					done     = True
 				if action == 'inactive':
 					inactive = True
@@ -147,7 +151,7 @@ def ask_questions(question_ids):
 				print('Must be right or wrong!')
 				time.sleep(3)
 				continue
-			if (right or wrong or active or inactive or revise) and nothing:
+			if (right or wrong or active or inactive or revise or edit) and nothing:
 				print('Cannot do nothing and be right or wrong!')
 				time.sleep(3)
 				continue
@@ -156,8 +160,6 @@ def ask_questions(question_ids):
 				time.sleep(3)
 				continue
 			# Handle choices in correct order
-			if action == 'nothing':
-				continue
 			if action == 'wrong':
 				rsdb.insert_answer(question_id, 'W')
 			elif action == 'right':
@@ -168,10 +170,32 @@ def ask_questions(question_ids):
 				rsdb.update_question_status(question_id, 'A')
 			if action == 'revise':
 				rsdb.update_question_status(question_id, 'R')
+			if action == 'edit':
+				edit_question(question_id, question, answer)
 			if action == 'done':
 				return
 			if action == 'quit':
 				sys.exit(0)
+			if action == 'nothing':
+				break
+			break
+
+
+def edit_question(question_id, question, answer):
+	shared.clear_screen()
+	print('Question was: \n\n\t' + question)
+	print('Answer was: \n\n\t' + answer)
+	print('\n\nUpdate question as (blank for leave as-is):\n\n')
+	new_question = input().strip()
+	print('\n\nUpdate answer as (blank for leave as-is):\n\n')
+	new_answer = input().strip()
+	if new_question != '':
+		rsdb.update_question(new_question, question_id)
+		print('\n\nQuestion updated\n\n')
+	if new_answer != '':
+		rsdb.update_answer(new_answer, question_id)
+		print('\n\nAnswer updated\n\n')
+	time.sleep(3)
 
 
 def review_questions():

@@ -125,6 +125,14 @@ def update_question_status(question_id, status):
 	run_qry('''update question set status = ? where question_id = ?''',(status, question_id))
 
 
+def update_question(question_id, question):
+	run_qry('''update question set question = ? where question_id = ?''', (question, question_id))
+
+
+def update_answer(question_id, answer):
+	run_qry('''update question set answer = ? where question_id = ?''', (answer, question_id))
+
+
 if __name__ == '__main__':
 	#
 	print(get_question_age(1))
