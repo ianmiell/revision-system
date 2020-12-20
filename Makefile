@@ -1,15 +1,16 @@
-run: init_db start save safe_clean
+clean: safe_clean init_db
+
+run: safe_clean init_db start save_state safe_clean
 
 init_db:
-	rm -f db/rs.db
 	cat db/db_export.sql | sqlite3 db/rs.db
 
 start:
 	echo 'start'
 
-save:
+save_state:
 	echo ".dump" | sqlite3 db/rs.db > db/db_export.sql
-	git commit -am re-run || true
+	git commit -am "saving state" || true
 	git pull --rebase -s recursive -X ours
 	git push
 
@@ -17,4 +18,3 @@ save:
 # Removes data that is recreated with a make
 safe_clean:
 	rm -f db/rs.db
-	cp /dev/null db/db_export.db

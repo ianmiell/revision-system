@@ -26,6 +26,20 @@ def fetchone(qry_str, args):
 	commit_and_close_conn(conn)
 	return result
 
+def get_categories():
+	conn, c = get_conn()
+	c.execute('select handle, num_followers, following_me from twitter_user where ignored = "N" and following_me = "Y" order by {0} desc'.format('num_followers'))
+	users = []
+	for user in c:
+		users.append(user)
+	commit_and_close_conn(conn)
+	return
+
+def add_question(question, answer, category):
+	conn, c = get_conn()
+	c.execute('insert into question (question, answer) values(?, ?)', (question, answer))
+	commit_and_close_conn(conn)
+
 # Examples:
 #def get_following_me(user_id):
 #	result = fetchone('select following_me from twitter_user where user_id = ?', (user_id,))
