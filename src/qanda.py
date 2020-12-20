@@ -20,7 +20,9 @@ def run_qanda():
 	tag_ids             = []
 
 	# Choose tags, get related questions
-	tag_ids             = question.choose_tags()
+	result, tag_ids             = question.choose_tags()
+	if not result:
+		return False
 	tagged_question_ids = get_tagged_questions(tag_ids)
 
 	for question_id in tagged_question_ids:
@@ -57,6 +59,7 @@ def run_qanda():
 	# Ask the questions
 	ask_questions(list(question_ids))
 	question_ids = None
+	return True
 
 
 def run_revise():
@@ -66,7 +69,9 @@ def run_revise():
 	tag_ids             = []
 
 	# Choose tags, get related questions
-	tag_ids             = question.choose_tags()
+	result, tag_ids             = question.choose_tags()
+	if not result:
+		return False
 	tagged_question_ids = get_tagged_questions(tag_ids)
 	for question_id in tagged_question_ids:
 		question_status = rsdb.get_question_status(question_id)
@@ -76,6 +81,7 @@ def run_revise():
 	# Ask the questions
 	ask_questions(list(question_ids))
 	question_ids = None
+	return True
 
 
 def ask_questions(question_ids):
@@ -210,7 +216,9 @@ def edit_question(question_id, question, answer):
 def review_questions():
 	shared.clear_screen()
 	# Choose tags
-	tag_ids             = question.choose_tags()
+	result, tag_ids             = question.choose_tags()
+	if not result:
+		return False
 	tagged_question_ids = get_tagged_questions(tag_ids)
 	# Shuffle questions
 	random.shuffle(tagged_question_ids)
@@ -245,10 +253,13 @@ def review_questions():
 		elif action == 'revise':
 			rsdb.update_question_status(question_id, 'R')
 		elif action == 'tag':
-			tag_ids = question.choose_tags()
+			result, tag_ids = question.choose_tags()
+			if not result:
+				continue
 			rsdb.add_question_tags(question_id, tag_ids)
 		elif action == 'history':
 			get_question_history(question_id)
+	return True
 
 
 def get_question(question_id):

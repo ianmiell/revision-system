@@ -41,11 +41,14 @@ def choose_tags():
 	# Pick tags
 	options = []
 	[ options.append(x[1]) for x in tags ]
+	options.append('Pick none')
 	res = pick.pick(options, title='Choose tags (space to select, return to continue)', indicator='x', multi_select=True, min_selection_count=1)
 	assert isinstance(res, list)
 	for item in res:
 		assert isinstance(item, tuple)
-	return res
+		if item[0] == 'Pick none':
+			return False, None
+	return True, res
 
 
 if __name__ == '__main__':

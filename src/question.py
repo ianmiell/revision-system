@@ -5,7 +5,9 @@ import shared
 
 def add_question():
 	shared.clear_screen()
-	tag_ids_chosen = choose_tags()
+	result, tag_ids_chosen = choose_tags()
+	if not result:
+		return
 	while True:
 		# Get question
 		question = shared.ask('Please input question to add: ')
@@ -20,7 +22,9 @@ def add_question():
 
 def choose_tags():
 	tags = tag.get_tags()
-	res  = tag.choose_tags()
+	result, res  = tag.choose_tags()
+	if not result:
+		return False, None
 	# Figure out which primary key ids were picked.
 	tag_ids_chosen     = set()
 	tag_indexes_chosen = set()
@@ -33,12 +37,14 @@ def choose_tags():
 	tag_chosen         = None
 	tag_indexes_chosen = None
 	tag_indexes_choice = None
-	return tag_ids_chosen
+	return True, tag_ids_chosen
 
 
 # This option exists for deprecated question files in old version of this application.
 def bulk_insert():
-	tag_ids_chosen = choose_tags()
+	result, tag_ids_chosen = choose_tags()
+	if not result:
+		return False
 	filename = shared.ask('\n\nPlease input filename: ')
 	for line in open(filename, 'r').readlines():
 		print(line)
@@ -48,6 +54,7 @@ def bulk_insert():
 			answer = line[3:]
 			rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
 			print('Added: ' + question + ' with answer: ' + answer)
+	return True
 
 
 if __name__ == '__main__':
