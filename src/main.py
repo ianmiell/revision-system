@@ -12,16 +12,18 @@ def main():
 			{'action': 'qanda',        'description': 'Do Q and A'},
 			{'action': 'revise',       'description': 'Revision questions'},
 			{'action': 'add_question', 'description': 'Add a question'},
-			{'action': 'add_tag',      'description': 'Add a tag'}
+			{'action': 'add_tag',      'description': 'Add a tag'},
 			{'action': 'quit',         'description': 'Quit'}
 		]
-		res = pick.pick(options, title='Choose: ', in_selection_count=1, options_map_func=shared.get_option_description())
+		res = pick.pick(options, title='Choose: ', options_map_func=shared.get_option_description)
 		do_qanda     = False
 		revise       = False
 		add_question = False
-		add_tag = False
+		add_tag      = False
 		for r in res:
-			action = r[0].get('action')
+			print(r)
+			sys.exit()
+			action = r.get('action')
 			if action == 'qanda':
 				do_qanda = True
 			elif action == 'revise':
@@ -30,6 +32,8 @@ def main():
 				add_question = True
 			elif action == 'add_tag':
 				add_tag = True
+			elif action == 'quit':
+				sys.exit()
 		if revise:
 			run_revise()
 		if do_qanda:
