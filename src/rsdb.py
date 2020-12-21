@@ -122,6 +122,15 @@ def get_question_status(question_id):
 	return question_status
 
 
+def get_ask_after(question_id):
+	assert isinstance(question_id, int)
+	conn, c = get_conn()
+	c.execute(r'''select ask_after from question where question_id = ?''', (question_id,))
+	ask_after = c.fetchone()[0]
+	commit_and_close_conn(conn)
+	return ask_after
+
+
 def get_question(question_id):
 	assert isinstance(question_id, int)
 	conn, c = get_conn()
@@ -129,6 +138,7 @@ def get_question(question_id):
 	question = c.fetchone()
 	commit_and_close_conn(conn)
 	return question
+
 
 def get_question_history(question_id):
 	assert isinstance(question_id, int)

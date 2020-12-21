@@ -59,6 +59,6 @@ def main():
 
 if __name__ == '__main__':
 	if sys.version_info.major == 2:
-		print('Must be python version 3')
+		print('Must be python version 3+')
 		sys.exit(1)
 	main()
