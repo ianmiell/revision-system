@@ -8,6 +8,7 @@ import rsdb
 import shared
 import tag
 import question
+import datetime
 
 
 # Q&A - looks through learning folder for asciidoc files
@@ -38,10 +39,8 @@ def run_qanda():
 			# If question is inactive, don't include it.
 			continue
 		ask_after = rsdb.get_ask_after(question_id)
-		print(ask_after)
-		if ask_after >= today:
+		if ask_after is not None and ask_after >= datetime.datetime.today().strftime('%Y-%m-%d'):
 			continue
-		sys.exit(1)
 		# If q is 'n' days old, add it.
 		if age in days:
 			question_ids.add(question_id)
