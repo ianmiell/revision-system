@@ -221,6 +221,9 @@ def make_inactive(question_id, question_string, answer):
 
 
 def edit_question(question_id, question, answer):
+	assert isinstance(question_id, int)
+	assert isinstance(question, str)
+	assert isinstance(answer, str)
 	shared.clear_screen()
 	print('Question was: \n\n\t' + question)
 	print('Answer was: \n\n\t' + answer)
@@ -229,10 +232,10 @@ def edit_question(question_id, question, answer):
 	print('\n\nUpdate answer as (blank for leave as-is):\n\n')
 	new_answer = input().strip()
 	if new_question != '':
-		rsdb.update_question(new_question, question_id)
+		rsdb.update_question(question_id, new_question)
 		print('\n\nQuestion updated\n\n')
 	if new_answer != '':
-		rsdb.update_answer(new_answer, question_id)
+		rsdb.update_answer(question_id, new_answer)
 		print('\n\nAnswer updated\n\n')
 	time.sleep(3)
 	shared.clear_screen()
