@@ -211,7 +211,7 @@ def make_inactive(question_id, question_string, answer):
 			print('\n\nNo number given, cancelling\n\n')
 		else:
 			rsdb.update_question_ask_after(question_id, days)
-			print('\n\nQuestion inactive for ' + str(days) + 'days\n\n')
+			print('\n\nQuestion inactive for ' + str(days) + ' days\n\n')
 		time.sleep(3)
 		shared.clear_screen()
 	except ValueError:
