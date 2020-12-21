@@ -1,8 +1,10 @@
+.PHONY: run clean init_db start save_state safe_clean
+
 run: check_run safe_clean init_db start save_state safe_clean
 
-clean: safe_clean init_db
+clean: init_db
 
-init_db:
+init_db: safe_clean
 	cat db/db_export.sql | sqlite3 db/revision-system.db
 
 start:
