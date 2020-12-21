@@ -13,6 +13,7 @@ def commit_and_close_conn(conn):
 
 
 def run_qry(qry_str, args=None):
+	assert isinstance(qry_str, str)
 	conn, c = get_conn()
 	if args is None:
 		ret = c.execute(qry_str)
@@ -23,6 +24,7 @@ def run_qry(qry_str, args=None):
 
 
 def fetchone(qry_str, args):
+	assert isinstance(qry_str, str)
 	conn, c = get_conn()
 	result = c.execute(qry_str, args).fetchone()
 	commit_and_close_conn(conn)
@@ -41,6 +43,9 @@ def get_tags():
 
 # TODO: handle dupe
 def add_tag(tag, notes, status='A'):
+	assert isinstance(tag, str)
+	assert isinstance(notes, str)
+	assert isinstance(status, str)
 	conn, c = get_conn()
 	c.execute('insert into tag (tag, notes, status) values(?, ?, ?)', (tag, notes, status))
 	# Get the id
@@ -51,6 +56,9 @@ def add_tag(tag, notes, status='A'):
 
 # TODO: handle dupe
 def add_question(question, answer, tag_ids):
+	assert isinstance(question, str)
+	assert isinstance(answer, str)
+	assert isinstance(tag_ids, list)
 	conn, c = get_conn()
 	# Insert the question, then get the id
 	c.execute('insert into question (question, answer) values(?, ?)', (question, answer))
@@ -64,6 +72,8 @@ def add_question(question, answer, tag_ids):
 
 
 def add_question_tags(question_id, tag_ids):
+	assert isinstance(question_id, int)
+	assert isinstance(tag_ids, list)
 	conn, c = get_conn()
 	for tag_id in tag_ids:
 		c.execute('insert or replace into question_tag (question_id, tag_id) values(?, ?)', (question_id, tag_id))
@@ -71,6 +81,8 @@ def add_question_tags(question_id, tag_ids):
 
 
 def get_related_questions(tag_ids, status=None):
+	assert isinstance(tag_ids, list)
+	assert isinstance(status, str) or status is None
 	# By default, active questions only.
 	conn, c = get_conn()
 	if status is None:
@@ -84,6 +96,7 @@ def get_related_questions(tag_ids, status=None):
 
 
 def get_question_age(question_id):
+	assert isinstance(question_id, int)
 	conn, c = get_conn()
 	c.execute(r'''select (strftime('%s','now') - strftime('%s',date_added)) / 60 / 60 / 24 from question where question_id = ?''', (question_id,))
 	age = c.fetchone()[0]
@@ -92,6 +105,7 @@ def get_question_age(question_id):
 
 
 def get_times_asked(question_id):
+	assert isinstance(question_id, int)
 	conn, c = get_conn()
 	c.execute(r'''select count(*) from answer where question_id = ?''', (question_id,))
 	times_asked = c.fetchone()[0]
@@ -100,6 +114,7 @@ def get_times_asked(question_id):
 
 
 def get_question_status(question_id):
+	assert isinstance(question_id, int)
 	conn, c = get_conn()
 	c.execute(r'''select status from question where question_id = ?''', (question_id,))
 	question_status = c.fetchone()[0]
@@ -108,6 +123,7 @@ def get_question_status(question_id):
 
 
 def get_question(question_id):
+	assert isinstance(question_id, int)
 	conn, c = get_conn()
 	c.execute('select question_id, question, answer, status from question where question_id = ?',(question_id,))
 	question = c.fetchone()
@@ -115,6 +131,7 @@ def get_question(question_id):
 	return question
 
 def get_question_history(question_id):
+	assert isinstance(question_id, int)
 	conn, c = get_conn()
 	c.execute('select date_added, question, answer from question where question_id = ?',(question_id,))
 	res = c.fetchone()
@@ -129,29 +146,43 @@ def get_question_history(question_id):
 
 
 def insert_answer(question_id, result):
+	assert isinstance(question_id, int)
 	assert result in ('R', 'W')
 	run_qry('''insert into answer (question_id, result) values (?, ?)''',(question_id, result))
 
 
 def update_question_status(question_id, status):
+	assert isinstance(question_id, int)
 	assert status in ('A', 'I', 'R')
 	run_qry('''update question set status = ? where question_id = ?''',(status, question_id))
 
 
 def update_question(question_id, question):
+	assert isinstance(question_id, int)
+	assert isinstance(question, str)
 	run_qry('''update question set question = ? where question_id = ?''', (question, question_id))
 
 
 def update_answer(question_id, answer):
+	assert isinstance(question_id, int)
+	assert isinstance(answer, str)
 	run_qry('''update question set answer = ? where question_id = ?''', (answer, question_id))
 
 
 def delete_question(question_id):
+	assert isinstance(question_id, int)
 	conn, c = get_conn()
 	run_qry('''delete from question_tag where question_id = ?''', (question_id,))
 	run_qry('''delete from answer where question_id = ?''', (question_id,))
 	run_qry('''delete from question where question_id = ?''', (question_id,))
 	commit_and_close_conn(conn)
+
+
+def update_question_ask_after(question_id, days):
+	assert isinstance(question_id, int)
+	assert isinstance(days, int)
+	run_qry('''update question set ask_after = DATE('now', '+{0} day') where question_id = ?'''.format(str(days)), (question_id,))
+
 
 
 if __name__ == '__main__':

@@ -94,13 +94,13 @@ def ask_questions(question_ids):
 	for question_id in question_ids:
 		num_questions_remaining -= 1
 		num_questions_asked     += 1
-		question, answer, question_status = get_question(question_id)
+		question_string, answer, question_status = get_question(question_id)
 		# Ask question
 		shared.clear_screen()
-		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question))
+		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
 		# Give answer
 		shared.page('\tA: ' + shared.hash_color_string(answer))
-		title = 'Your answer to question:\n\n\t' + question + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move'
+		title = 'Your answer to question:\n\n\t' + question_string + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move'
 		options = [
 			{'action': 'right',    'description': 'I got that right'},
 			{'action': 'wrong',    'description': 'I got that wrong'},
@@ -112,10 +112,10 @@ def ask_questions(question_ids):
 		]
 		if question_status == 'R':
 			options.append({'action': 'active',   'description': 'Take out of revise mode'})
-			options.append({'action': 'inactive', 'description': 'Do not ask again'})
+			options.append({'action': 'inactive', 'description': 'Do not ask again for n days'})
 		elif question_status == 'A':
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
-			options.append({'action': 'inactive', 'description': 'Do not ask again'})
+			options.append({'action': 'inactive', 'description': 'Do not ask again for n days'})
 		elif question_status == 'I':
 			options.append({'action': 'active',   'description': 'Take out of revise mode'})
 			options.append({'action': 'revise',   'description': 'Revise (ask me every time)'})
@@ -177,13 +177,13 @@ def ask_questions(question_ids):
 			elif right:
 				rsdb.insert_answer(question_id, 'R')
 			if inactive:
-				rsdb.update_question_status(question_id, 'I')
+				make_inactive(question_id, question_string, answer)
 			if active:
 				rsdb.update_question_status(question_id, 'A')
 			if revise:
 				rsdb.update_question_status(question_id, 'R')
 			if edit:
-				edit_question(question_id, question, answer)
+				edit_question(question_id, question_string, answer)
 			if delete:
 				rsdb.delete_question(question_id)
 			if done:
@@ -193,6 +193,27 @@ def ask_questions(question_ids):
 			if nothing:
 				break
 			break
+
+
+def make_inactive(question_id, question_string, answer):
+	shared.clear_screen()
+	print('Question was: \n\n\t' + question_string)
+	print('Answer was: \n\n\t' + answer)
+	print('\n\nMake question inactive for how many days (0 == forever, no number == cancel):\n\n')
+	try:
+		days = int(input().strip())
+		if days == 0:
+			rsdb.update_question_status(question_id, 'I')
+			print('\n\nNo number given, cancelling\n\n')
+		else:
+			rsdb.update_question_ask_after(question_id, days)
+			print('\n\nQuestion inactive for ' + str(days) + 'days\n\n')
+		time.sleep(3)
+		shared.clear_screen()
+	except ValueError:
+		print('\n\nNo number given, cancelling\n\n')
+		time.sleep(3)
+		shared.clear_screen()
 
 
 def edit_question(question_id, question, answer):
@@ -228,7 +249,7 @@ def review_questions():
 		title = 'Question:\n\n\t' + question_string + '\n\nAnswer:\n\n\t' + answer + '\n\nCurrent status: ' + status_description + '\n\nENTER to choose, UP/DOWN to move'
 		options = [
 			{'action': 'do_nothing', 'description': 'Do nothing'},
-			{'action': 'inactive',   'description': 'Do not ask again'},
+			{'action': 'inactive',   'description': 'Do not ask again for n days'},
 			{'action': 'history',    'description': 'Show question history'},
 			{'action': 'tag',        'description': 'Tag question'},
 			{'action': 'finish',     'description': 'Finish review'},
@@ -250,6 +271,7 @@ def review_questions():
 			elif action == 'finish':
 				return True
 			elif action == 'inactive':
+				make_inactive(question_id, question_string, answer)
 				rsdb.update_question_status(question_id, 'I')
 				break
 			elif action == 'revise':

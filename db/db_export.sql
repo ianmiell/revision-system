@@ -60,7 +60,7 @@ INSERT INTO question VALUES(2,'2020-12-16 16:46:21','What is RDS?','Amazon''s vi
 INSERT INTO question VALUES(3,'2020-12-19 12:19:04','What is Global Accelerator?','Uses Anycast IPs to speed up connections to edge locations. It also has healthchecks and DDoS protection','A',NULL);
 INSERT INTO question VALUES(4,'2020-12-19 12:20:05','What is Unicast IP vs Anycast IP?','Unicast is normal IP, Anycast is multiple servers have an IP, and user routed to nearest one. It goes through the edge location.','A',NULL);
 INSERT INTO question VALUES(5,'2020-12-19 12:22:50','What is the difference between Global Accelerator vs CloudFront?','CloudFront content is served at the edge. Accelerator proxies packets, good fit for gaming (UDP etc).','A',NULL);
-INSERT INTO question VALUES(6,'2020-12-19 13:01:20',replace('Is a new AMI available across all regions?\n','\n',char(10)),replace('No, but it can be copied to other regions and gets a new AMI id.\n','\n',char(10)),'A',NULL);
+INSERT INTO question VALUES(6,'2020-12-19 13:01:20',replace('Is a new AMI available across all regions?\n','\n',char(10)),replace('No, but it can be copied to other regions and gets a new AMI id.\n','\n',char(10)),'A','2020-12-23');
 INSERT INTO question VALUES(7,'2020-12-19 13:01:20',replace('What are the three parts to an AMI?\n','\n',char(10)),replace('They are: 1) Root volume 2) Launch perms 3) Volumes to attach on launch\n','\n',char(10)),'A',NULL);
 INSERT INTO question VALUES(8,'2020-12-19 13:01:20',replace('AMIs are public by default. True or False?\n','\n',char(10)),replace('False\n','\n',char(10)),'A',NULL);
 INSERT INTO question VALUES(9,'2020-12-19 13:01:20',replace('How can AMIs be shared?\n','\n',char(10)),replace('By adding the account number you want to share it with, or copy to another region. When share, you can specify that they can''t just copy it directly to someone else (tho they can spin up an EC2 and make an image from that).\n','\n',char(10)),'A',NULL);
@@ -90,4 +90,5 @@ INSERT INTO answer VALUES(5,3,'2020-12-20 16:50:01','R');
 INSERT INTO answer VALUES(6,6,'2020-12-20 16:50:04','R');
 INSERT INTO answer VALUES(7,6,'2020-12-20 17:03:04','R');
 INSERT INTO answer VALUES(8,5,'2020-12-20 17:03:11','W');
+INSERT INTO answer VALUES(9,6,'2020-12-21 14:02:10','R');
 COMMIT;
