@@ -172,25 +172,25 @@ def ask_questions(question_ids):
 				time.sleep(3)
 				continue
 			# Handle choices in correct order
-			if action == 'wrong':
+			if wrong:
 				rsdb.insert_answer(question_id, 'W')
-			elif action == 'right':
+			elif right:
 				rsdb.insert_answer(question_id, 'R')
-			if action == 'inactive':
+			if inactive:
 				rsdb.update_question_status(question_id, 'I')
-			if action == 'active':
+			if active:
 				rsdb.update_question_status(question_id, 'A')
-			if action == 'revise':
+			if revise:
 				rsdb.update_question_status(question_id, 'R')
-			if action == 'edit':
+			if edit:
 				edit_question(question_id, question, answer)
-			if action == 'delete':
+			if delete:
 				rsdb.delete_question(question_id)
-			if action == 'done':
+			if done:
 				return
-			if action == 'quit':
+			if quit:
 				sys.exit(0)
-			if action == 'nothing':
+			if nothing:
 				break
 			break
 
