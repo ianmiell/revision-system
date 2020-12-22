@@ -104,7 +104,7 @@ def ask_questions(question_ids):
 		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
 		# Give answer
 		shared.page('\tA: ' + shared.hash_color_string(answer))
-		title = 'Your answer to question:\n\n\t' + question_string + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move'
+		title = 'Your answer to question:\n\n\t' + question_string + '\n\nSPACE to confirm, ENTER to continue, UP/DOWN to move\n\n' + get_question_history(question_id)
 		options = [
 			{'action': 'right',    'description': 'I got that right'},
 			{'action': 'wrong',    'description': 'I got that wrong'},
@@ -291,7 +291,9 @@ def review_questions():
 				rsdb.add_question_tags(question_id, tag_ids)
 				break
 			elif action == 'history':
-				get_question_history(question_id)
+				shared.clear_screen()
+				print(get_question_history(question_id))
+				shared.page()
 				continue
 	return True
 
@@ -305,14 +307,14 @@ def get_question(question_id):
 
 
 def get_question_history(question_id):
-	shared.clear_screen()
-	print('Question history: ')
+	history_string = ''
+	history_string += 'Question history: '
 	date_added, question, answer, answers = rsdb.get_question_history(question_id)
-	print('\nQuestion: ' + question)
-	print('\nAnswer: ' + answer)
-	print('\nQuestion added on: ' + date_added + '\n')
+	history_string += '\nQuestion: ' + question
+	history_string += '\nAnswer: ' + answer
+	history_string += '\nQuestion added on: ' + date_added + '\n'
 	if not answers:
-		print('This question has not been answered yet.\n')
+		history_string += 'This question has not been answered yet.\n'
 	for answer in answers:
 		time   = answer[0]
 		result = answer[1]
@@ -323,9 +325,8 @@ def get_question_history(question_id):
 		else:
 			print('result was: ' + result + ', this is a bug')
 			sys.exit(1)
-		print('At ' + time + ' you answered this question ' + result + '.')
-	shared.page()
-
+		history_string += 'At ' + time + ' you answered this question ' + result + '.'
+	return history_string
 
 def get_days():
 	# Prime numbers
