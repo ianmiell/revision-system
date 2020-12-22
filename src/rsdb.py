@@ -113,6 +113,15 @@ def get_times_asked(question_id):
 	return times_asked
 
 
+def asked_today(question_id):
+	assert isinstance(question_id, int)
+	conn, c = get_conn()
+	c.execute(r'''select count(*) from answer where question_id = ? and date_answered > date('now')''', (question_id,))
+	asked_today = c.fetchone()[0]
+	commit_and_close_conn(conn)
+	return asked_today != 0
+
+
 def get_question_status(question_id):
 	assert isinstance(question_id, int)
 	conn, c = get_conn()

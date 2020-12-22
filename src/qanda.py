@@ -41,6 +41,9 @@ def run_qanda():
 		ask_after = rsdb.get_ask_after(question_id)
 		if ask_after is not None and ask_after >= datetime.datetime.today().strftime('%Y-%m-%d'):
 			continue
+		# If it has already been asked today, do not ask again
+		if rsdb.asked_today(question_id):
+			continue
 		# If q is 'n' days old, add it.
 		if age in days:
 			question_ids.add(question_id)
