@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#-*-coding:utf-8-*-
 import os
 import random
 import sys
@@ -319,14 +319,15 @@ def get_question_history(question_id):
 		time   = answer[0]
 		result = answer[1]
 		if result == 'R':
-			result = 'correctly'
+			result = '✔'
 		elif result == 'W':
-			result = 'wrongly'
+			result = 'x'
 		else:
 			print('result was: ' + result + ', this is a bug')
 			sys.exit(1)
-		history_string += 'At ' + time + ' you answered this question ' + result + '.'
+		history_string += 'At ' + time + ' your answer was ' + result + '.'
 	return history_string
+
 
 def get_days():
 	# Prime numbers

@@ -32,6 +32,10 @@ def clear_screen():
 		print("\033c", end="")
 
 
+def strikethrough(msg):
+	return colorit.strike(msg)
+
+
 def hash_color_string(msg, bold=True, strikethrough=False, underline=False):
 	hash_val = int(hashlib.sha256(msg.encode('utf-8')).hexdigest(), 16) % 10**1
 	green  = [0,   128, 0]

@@ -13,8 +13,7 @@ start:
 save_state:
 	clear
 	echo ".dump" | sqlite3 db/revision-system.db > db/db_export.sql
-	git add db/db_export.sql
-	git commit -m "saving state" || true
+	git commit -am "saving state" || true
 	git pull --rebase -s recursive -X ours
 	git push
 	clear
