@@ -2,6 +2,7 @@ import subprocess
 import platform
 import colorit
 import hashlib
+import readline
 
 def page(msg='[Hit enter to continue]'):
 	return ask(msg)
