@@ -161,19 +161,19 @@ def ask_questions(question_ids):
 			# Checks
 			if right and wrong:
 				print('Cannot be right and wrong!')
-				time.sleep(3)
+				time.sleep(2)
 				continue
 			if not right and not wrong and not delete and not done and not edit and not inactive and not nothing and not quit and not revise:
 				print('Must be right or wrong!')
-				time.sleep(3)
+				time.sleep(2)
 				continue
 			if (right or wrong or active or inactive or revise or edit) and (nothing or delete):
 				print('Cannot do nothing or delete, and be right, wrong, active, or inactive!')
-				time.sleep(3)
+				time.sleep(2)
 				continue
 			if (active and inactive) or (inactive and revise) or (active and revise):
 				print('Cannot be multiple states (should not get here)!')
-				time.sleep(3)
+				time.sleep(2)
 				continue
 			# Handle choices in correct order
 			if wrong:
@@ -212,11 +212,11 @@ def make_inactive(question_id, question_string, answer):
 		else:
 			rsdb.update_question_ask_after(question_id, days)
 			print('\n\nQuestion inactive for ' + str(days) + ' days\n\n')
-		time.sleep(3)
+		time.sleep(2)
 		shared.clear_screen()
 	except ValueError:
 		print('\n\nNo number given, cancelling\n\n')
-		time.sleep(3)
+		time.sleep(2)
 		shared.clear_screen()
 
 
@@ -237,7 +237,7 @@ def edit_question(question_id, question, answer):
 	if new_answer != '':
 		rsdb.update_answer(question_id, new_answer)
 		print('\n\nAnswer updated\n\n')
-	time.sleep(3)
+	time.sleep(2)
 	shared.clear_screen()
 
 

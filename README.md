@@ -37,3 +37,19 @@ Tags can be arbitrarily set, with a 1-n relationship between question and tag.
 ## Pre-Loaded Questions
 
 There are twenty questions and three tags set up to get you going as an example. If you want a completely fresh environment, go into the `db/db_export.sql` file and remove all the `INSERT` lines, then commit and push.
+
+## Requirements
+
+```
+pip3 install -r requirements
+```
+
+Also depends on:
+
+```
+git
+make
+python3
+sqlite3
+```
+
