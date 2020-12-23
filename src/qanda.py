@@ -106,7 +106,7 @@ def ask_questions(question_ids):
 		shared.clear_screen()
 		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
 		# Give answer
-		shared.page('\tA: ' + shared.hash_color_string(answer))
+		shared.page('\n\tA: ' + shared.hash_color_string(answer))
 		title = get_question_history(question_id) + '\nSPACE to confirm, ENTER to continue, UP/DOWN to move\n'
 		options = [
 			{'action': 'right',    'description': 'I got that right'},
