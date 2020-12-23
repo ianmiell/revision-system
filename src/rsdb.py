@@ -170,6 +170,11 @@ def insert_answer(question_id, result):
 	run_qry('''insert into answer (question_id, result) values (?, ?)''',(question_id, result))
 
 
+def update_question_new(question_id):
+	assert isinstance(question_id, int)
+	run_qry('''update question set date_added = strftime('%Y-%m-%d %H:%M:%f', 'now') where question_id = ?''',(question_id,))
+
+
 def update_question_status(question_id, status):
 	assert isinstance(question_id, int)
 	assert status in ('A', 'I', 'R')

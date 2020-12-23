@@ -115,6 +115,7 @@ def ask_questions(question_ids):
 			{'action': 'delete',   'description': 'Permanently delete question'},
 			{'action': 'done',     'description': 'Return to main menu'},
 			{'action': 'quit',     'description': 'Quit and save state'},
+			{'action': 'new',      'description': 'Set question as newly-added'},
 			{'action': 'nothing',  'description': 'Do nothing'},
 		]
 		if question_status == 'R':
@@ -133,6 +134,7 @@ def ask_questions(question_ids):
 			done     = False
 			edit     = False
 			inactive = False
+			new      = False
 			nothing  = False
 			quit     = False
 			revise   = False
@@ -151,6 +153,8 @@ def ask_questions(question_ids):
 					edit     = True
 				if action == 'inactive':
 					inactive = True
+				if action == 'new':
+					new = True
 				if action == 'nothing':
 					nothing  = True
 				if action == 'quit':
@@ -166,11 +170,11 @@ def ask_questions(question_ids):
 				print('Cannot be right and wrong!')
 				time.sleep(2)
 				continue
-			if not right and not wrong and not delete and not done and not edit and not inactive and not nothing and not quit and not revise:
-				print('Must be right or wrong!')
+			if not right and not wrong and not delete and not done and not edit and not inactive and not nothing and not quit and not revise and not new:
+				print('Must pick one!')
 				time.sleep(2)
 				continue
-			if (right or wrong or active or inactive or revise or edit) and (nothing or delete):
+			if (right or wrong or active or inactive or revise or edit or new) and (nothing or delete):
 				print('Cannot do nothing or delete, and be right, wrong, active, or inactive!')
 				time.sleep(2)
 				continue
@@ -193,6 +197,8 @@ def ask_questions(question_ids):
 				edit_question(question_id, question_string, answer)
 			if delete:
 				rsdb.delete_question(question_id)
+			if new:
+				rsdb.update_question_new(question_id)
 			if done:
 				return
 			if quit:
@@ -263,6 +269,7 @@ def review_questions():
 			{'action': 'history',    'description': 'Show question history'},
 			{'action': 'tag',        'description': 'Tag question'},
 			{'action': 'finish',     'description': 'Finish review'},
+			{'action': 'new',        'description': 'Set question as newly-added'},
 		]
 		if question_status == 'R':
 			options.append({'action': 'active',   'description': 'Make question active'})
@@ -298,6 +305,9 @@ def review_questions():
 				print(get_question_history(question_id))
 				shared.page()
 				continue
+			elif action == 'new':
+				rsdb.update_question_new(question_id)
+				break
 	return True
 
 
