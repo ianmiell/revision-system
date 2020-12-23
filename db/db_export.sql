@@ -59,7 +59,7 @@ INSERT INTO question VALUES(1,'2020-12-16 16:45:21','What is EC2?','Amazon''s vi
 INSERT INTO question VALUES(2,'2020-12-16 16:46:21','What is RDS?','Amazon''s virtual relational database service.','I',NULL);
 INSERT INTO question VALUES(3,'2020-12-19 12:19:04','What is Global Accelerator?','Uses Anycast IPs to speed up connections to edge locations. It also has healthchecks and DDoS protection','A',NULL);
 INSERT INTO question VALUES(4,'2020-12-19 12:20:05','What is Unicast IP vs Anycast IP?','Unicast is normal IP, Anycast is multiple servers have an IP, and user routed to nearest one. It goes through the edge location.','A',NULL);
-INSERT INTO question VALUES(5,'2020-12-19 12:22:50','What is the difference between Global Accelerator vs CloudFront?','CloudFront content is served at the edge. Accelerator proxies packets, good fit for gaming (UDP etc).','A',NULL);
+INSERT INTO question VALUES(5,'2020-12-23 09:28:16.587','What is the difference between Global Accelerator vs CloudFront?','CloudFront content is served at the edge. Accelerator proxies packets, good fit for gaming (UDP etc).','A',NULL);
 INSERT INTO question VALUES(6,'2020-12-19 13:01:20',replace('Is a new AMI available across all regions?\n','\n',char(10)),replace('No, but it can be copied to other regions and gets a new AMI id.\n','\n',char(10)),'A','2020-12-23');
 INSERT INTO question VALUES(7,'2020-12-19 13:01:20',replace('What are the three parts to an AMI?\n','\n',char(10)),replace('They are: 1) Root volume 2) Launch perms 3) Volumes to attach on launch\n','\n',char(10)),'A',NULL);
 INSERT INTO question VALUES(8,'2020-12-19 13:01:20',replace('AMIs are public by default. True or False?\n','\n',char(10)),replace('False\n','\n',char(10)),'A',NULL);
