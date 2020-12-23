@@ -303,9 +303,9 @@ def review_questions():
 
 def get_question(question_id):
 	question_res    = rsdb.get_question(question_id)
-	question        = question_res[1]
-	answer          = question_res[2]
-	question_status = question_res[3]
+	question        = question_res[1].strip()
+	answer          = question_res[2].strip()
+	question_status = question_res[3].strip()
 	return question, answer, question_status
 
 
@@ -313,7 +313,7 @@ def get_question_history(question_id):
 	history_string = ''
 	date_added, question, answer, answers = rsdb.get_question_history(question_id)
 	history_string += '\nQ: ' + question
-	history_string += 'A: ' + answer
+	history_string += '\nA: ' + answer
 	history_string += '\nQuestion added on: ' + date_added + '\n\n'
 	if not answers:
 		history_string += 'This question has not been answered yet.\n'
