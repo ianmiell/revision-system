@@ -3,6 +3,8 @@ import platform
 import colorit
 import hashlib
 import readline
+import subprocess
+import it2check
 
 def page(msg='[Hit enter to continue]'):
 	return ask(msg)
@@ -35,6 +37,12 @@ def clear_screen():
 
 def strikethrough(msg):
 	return colorit.strike(msg)
+
+
+def hash_image(msg):
+	if it2check.check():
+		hash_val = int(hashlib.sha256(msg.encode('utf-8')).hexdigest(), 16) % 939**1
+		subprocess.run('imgcat images/' + str(hash_val) + '.*.jpg', shell=True)
 
 
 def hash_color_string(msg, bold=True, strikethrough=False, underline=False):

@@ -104,6 +104,7 @@ def ask_questions(question_ids):
 		question_string, answer, question_status = get_question(question_id)
 		# Ask question
 		shared.clear_screen()
+		shared.hash_image(question_string)
 		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
 		# Give answer
 		shared.page('\n\tA: ' + shared.hash_color_string(answer))
