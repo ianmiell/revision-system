@@ -42,7 +42,7 @@ def strikethrough(msg):
 def hash_image(msg):
 	if it2check.check():
 		hash_val = int(hashlib.sha256(msg.encode('utf-8')).hexdigest(), 16) % 939**1
-		subprocess.run('imgcat images/' + str(hash_val) + '.*.jpg', shell=True)
+		subprocess.run('curl -s https://raw.githubusercontent.com/ianmiell/revision-system-images/main/1200_800/' + str(hash_val) + '.jpg | ./bin/imgcat', shell=True)
 
 
 def hash_color_string(msg, bold=True, strikethrough=False, underline=False):
