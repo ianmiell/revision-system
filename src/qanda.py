@@ -270,6 +270,7 @@ def review_questions():
 			{'action': 'history',    'description': 'Show question history'},
 			{'action': 'tag',        'description': 'Tag question'},
 			{'action': 'finish',     'description': 'Finish review'},
+			{'action': 'edit',       'description': 'Edit question'},
 			{'action': 'new',        'description': 'Set question as newly-added'},
 		]
 		if question_status == 'R':
@@ -286,6 +287,8 @@ def review_questions():
 			action = res[0].get('action')
 			if action == 'do_nothing':
 				break
+			elif action == 'edit':
+				edit_question(question_id, question_string, answer)
 			elif action == 'finish':
 				return True
 			elif action == 'inactive':
