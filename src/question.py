@@ -16,7 +16,7 @@ def add_question():
 		# Insert question, and tags
 		rsdb.add_question(question=question, answer=answer, tag_ids=tag_ids_chosen)
 		do_continue = shared.ask_continue('Add another question with these tags (y/n)?')
-		if do_continue not in ('y','Y','YES','Yes'):
+		if do_continue:
 			break
 
 
