@@ -105,7 +105,7 @@ def ask_questions(question_ids):
 		# Ask question
 		shared.clear_screen()
 		shared.hash_image(question_string)
-		shared.page('Question ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
+		shared.page('\nQuestion ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
 		# Give answer
 		shared.page('\n\tA: ' + shared.hash_color_string(answer))
 		title = get_question_history(question_id) + '\nSPACE to confirm, ENTER to continue, UP/DOWN to move\n'
@@ -211,21 +211,21 @@ def ask_questions(question_ids):
 
 def make_inactive(question_id, question_string, answer):
 	shared.clear_screen()
-	print('Question was: \n\n\t' + question_string)
-	print('Answer was: \n\n\t' + answer)
-	print('\n\nMake question inactive for how many days (0 == forever, no number == cancel):\n\n')
+	print('\nQuestion was: \n\n\t' + shared.hash_color_string(question_string))
+	print('\nAnswer was: \n\n\t' + shared.hash_color_string(answer))
+	print('\nMake question inactive for how many days (0 == forever, no number == cancel):\n')
 	try:
 		days = int(input().strip())
 		if days == 0:
 			rsdb.update_question_status(question_id, 'I')
-			print('\n\nNo number given, cancelling\n\n')
+			print('\nNo number given, cancelling\n')
 		else:
 			rsdb.update_question_ask_after(question_id, days)
-			print('\n\nQuestion inactive for ' + str(days) + ' days\n\n')
+			print('\nQuestion inactive for ' + str(days) + ' days\n')
 		time.sleep(2)
 		shared.clear_screen()
 	except ValueError:
-		print('\n\nNo number given, cancelling\n\n')
+		print('\nNo number given, cancelling\n')
 		time.sleep(2)
 		shared.clear_screen()
 
