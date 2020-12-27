@@ -63,6 +63,52 @@ def run_qanda():
 				question_ids.add(question_id)
 			count, times_asked, question_status = None, None, None
 	tag_ids, tagged_question_ids = None, None
+
+	# For all questions, divide them into groups:
+	#       - questions that have never been asked
+	#       - questions that have been answered but always wrongly
+	#       - questions that were last answered wrongly
+	#       - questions that have been answered wrongly previously
+	#       - questions that have always been answered correctly
+	# Then shuffle within these groups.
+	asked_but_always_answered_wrongly  = list()
+	never_asked                        = list()
+	last_answered_wrongly              = list()
+	previously_answered_wrongly        = list()
+	asked_and_always_right             = list()
+	for question_id in question_ids:
+		_, _, _, answers = rsdb.get_question_history(question_id)
+		results = list()
+		for answer in answers:
+			results.append(answer[1])
+		if not results:
+			never_asked.append(question_id)
+		# Always wrong
+		elif results[0] == 'W' and len(set(results)) == 1:
+			asked_but_always_answered_wrongly.append(question_id)
+		elif results[0] == 'R' and len(set(results)) == 1:
+			asked_and_always_right.append(question_id)
+		elif results[-1] == 'W':
+			last_answered_wrongly.append(question_id)
+		elif any('W'):
+			previously_answered_wrongly.append(question_id)
+		# Some other category?
+		else:
+			print('Un-captured quesiton history category - BUG')
+			print(results)
+			sys.exit(1)
+	random.shuffle(never_asked)
+	random.shuffle(asked_but_always_answered_wrongly)
+	random.shuffle(last_answered_wrongly)
+	random.shuffle(previously_answered_wrongly)
+	random.shuffle(asked_and_always_right)
+	question_ids = asked_but_always_answered_wrongly + never_asked + last_answered_wrongly + previously_answered_wrongly + asked_and_always_right
+	print('There are ' + str(len(never_asked)) + ' questions that have never been asked')
+	print('There are ' + str(len(asked_but_always_answered_wrongly)) + ' questions that have been asked but answered wrongly')
+	print('There are ' + str(len(last_answered_wrongly)) + ' questions that were last answered wrongly')
+	print('There are ' + str(len(previously_answered_wrongly)) + ' questions that have been previously answered wrongly')
+	print('There are ' + str(len(asked_and_always_right)) + ' questions that have always been answered correctly')
+	shared.page()
 	# Ask the questions
 	ask_questions(list(question_ids))
 	question_ids = None
@@ -96,8 +142,6 @@ def ask_questions(question_ids):
 	num_questions           = len(question_ids)
 	num_questions_remaining = num_questions
 	num_questions_asked     = 0
-	# Shuffle questions
-	random.shuffle(question_ids)
 	for question_id in question_ids:
 		num_questions_remaining -= 1
 		num_questions_asked     += 1
