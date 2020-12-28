@@ -16,9 +16,12 @@ def run_qanda():
 	shared.clear_screen()
 	days = get_days()
 
-	question_ids        = set()
-	tagged_question_ids = set()
-	tag_ids             = []
+	question_ids              = set()
+	tagged_question_ids       = set()
+	tag_ids                   = []
+	already_asked_today_count = 0
+	deferred_questions        = 0
+	inactive_questions        = 0
 
 	# Choose tags, get related questions
 	result, tag_ids             = question.choose_tags()
@@ -37,12 +40,15 @@ def run_qanda():
 			question_ids.add(question_id)
 		elif question_status == 'I':
 			# If question is inactive, don't include it.
+			inactive_questions += 1
 			continue
 		ask_after = rsdb.get_ask_after(question_id)
 		if ask_after is not None and ask_after >= datetime.datetime.today().strftime('%Y-%m-%d'):
+			deferred_questions += 1
 			continue
 		# If it has already been asked today, do not ask again
 		if rsdb.asked_today(question_id):
+			already_asked_today_count += 1
 			continue
 		# If q is 'n' days old, add it.
 		if age in days:
@@ -103,11 +109,18 @@ def run_qanda():
 	random.shuffle(previously_answered_wrongly)
 	random.shuffle(asked_and_always_right)
 	question_ids = asked_but_always_answered_wrongly + never_asked + last_answered_wrongly + previously_answered_wrongly + asked_and_always_right
+	print('Questions to be asked:')
 	print('There are ' + str(len(never_asked)) + ' questions that have never been asked')
 	print('There are ' + str(len(asked_but_always_answered_wrongly)) + ' questions that have been asked but answered wrongly')
 	print('There are ' + str(len(last_answered_wrongly)) + ' questions that were last answered wrongly')
 	print('There are ' + str(len(previously_answered_wrongly)) + ' questions that have been previously answered wrongly')
 	print('There are ' + str(len(asked_and_always_right)) + ' questions that have always been answered correctly')
+	print('')
+	print('Other questions that will not be asked:')
+	print('There are ' + str(already_asked_today_count) + ' questions that have already been answered today')
+	print('There are ' + str(deferred_questions) + ' deferred questions')
+	print('There are ' + str(inactive_questions) + ' inactive questions')
+	print('')
 	shared.page()
 	# Ask the questions
 	ask_questions(list(question_ids))
@@ -282,9 +295,9 @@ def edit_question(question_id, question, answer):
 	print('Question was: \n\n\t' + shared.hash_color_string(question))
 	print('\nAnswer was: \n\n\t' + shared.hash_color_string(answer))
 	print('\nUpdate question as (blank for leave as-is):\n')
-	new_question = input().strip()
+	new_question = shared.input_paragraph().strip()
 	print('\nUpdate answer as (blank for leave as-is):\n')
-	new_answer = input().strip()
+	new_answer = shared.input_paragraph().strip()
 	if new_question != '':
 		rsdb.update_question(question_id, new_question)
 		print('\nQuestion updated\n')
