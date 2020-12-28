@@ -108,10 +108,10 @@ def run_qanda():
 	random.shuffle(last_answered_wrongly)
 	random.shuffle(previously_answered_wrongly)
 	random.shuffle(asked_and_always_right)
-	question_ids = asked_but_always_answered_wrongly + never_asked + last_answered_wrongly + previously_answered_wrongly + asked_and_always_right
+	question_ids = never_asked + asked_but_always_answered_wrongly + last_answered_wrongly + previously_answered_wrongly + asked_and_always_right
 	print('Questions to be asked:')
 	print('There are ' + str(len(never_asked)) + ' questions that have never been asked')
-	print('There are ' + str(len(asked_but_always_answered_wrongly)) + ' questions that have been asked but answered wrongly')
+	print('There are ' + str(len(asked_but_always_answered_wrongly)) + ' questions that have been asked but have only been answered wrongly')
 	print('There are ' + str(len(last_answered_wrongly)) + ' questions that were last answered wrongly')
 	print('There are ' + str(len(previously_answered_wrongly)) + ' questions that have been previously answered wrongly')
 	print('There are ' + str(len(asked_and_always_right)) + ' questions that have always been answered correctly')
