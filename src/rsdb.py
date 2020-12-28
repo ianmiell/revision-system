@@ -158,7 +158,7 @@ def get_question_history(question_id):
 	question   = res[1]
 	answer     = res[2]
 	answers = list()
-	for row in c.execute('select date_answered, result from answer where question_id = ?',(question_id,)):
+	for row in c.execute('select date_answered, result from answer where question_id = ? order by date_answered',(question_id,)):
 		answers.append(row)
 	commit_and_close_conn(conn)
 	return date_added, question, answer, answers

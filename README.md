@@ -26,6 +26,21 @@ If you exit unexpectedly and want to save state, run:
 ./save
 ```
 
+## Features
+
+- Stores your answer history within the repo
+
+- Orders questions, prioritising ones that you have never answered, or got wrong previously
+
+- Allows you to categorise questions by tag
+
+- You can 'ignore' questions for n days if you feel like you will know them in the next n days, but need reminding about them later
+
+- If you 'miss' days of revision, you will be asked the question again until you 'catch up' with the number of times the question should have been asked up to the present time
+
+- Does not ask the same question twice in a day
+
+
 ## How It Works
 
 Questions and answers are stored in a sqlite3 database, which tracks what questions you've answered and when.

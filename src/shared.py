@@ -17,7 +17,7 @@ def ask(msg=''):
 
 
 def get_option_description(option):
-    return option.get('description')
+	return option.get('description')
 
 
 def ask_continue(msg):
@@ -90,3 +90,15 @@ def hash_color_string(msg, bold=True, strikethrough=False, underline=False):
 	if underline:
 		to_print = colorit.under(to_print)
 	return to_print
+
+
+def input_paragraph():
+	lines = ""
+	while True:
+		if lines == "":
+			print("Enter string:")
+		x = input()
+		if x == "" and lines != "":
+			return lines
+		else:
+			lines += x + '\n'
