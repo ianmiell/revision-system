@@ -22,6 +22,7 @@ def run_qanda():
 	already_asked_today_count = 0
 	deferred_questions        = 0
 	inactive_questions        = 0
+	not_considered_today      = 0
 
 	# Choose tags, get related questions
 	result, tag_ids             = question.choose_tags()
@@ -67,6 +68,8 @@ def run_qanda():
 			# If this hasn't been asked enough, ask it.
 			if times_asked < count:
 				question_ids.add(question_id)
+			else:
+				not_considered_today += 1
 			count, times_asked, question_status = None, None, None
 	tag_ids, tagged_question_ids = None, None
 
@@ -119,6 +122,7 @@ def run_qanda():
 	print('Other questions that will not be asked:')
 	print('There are ' + str(already_asked_today_count) + ' questions that have already been answered today')
 	print('There are ' + str(deferred_questions) + ' deferred questions')
+	print('There are ' + str(not_considered_today) + ' questions that are not being considered today')
 	print('There are ' + str(inactive_questions) + ' inactive questions')
 	print('')
 	shared.page()
