@@ -92,11 +92,11 @@ def hash_color_string(msg, bold=True, strikethrough=False, underline=False):
 	return to_print
 
 
-def input_paragraph():
+def input_paragraph(msg='Enter string: '):
 	lines = ""
 	while True:
 		if lines == "":
-			print("Enter string:")
+			print(msg)
 		x = input()
 		if x == "" and lines != "":
 			return lines
