@@ -10,9 +10,9 @@ def add_question():
 		return
 	while True:
 		# Get question
-		question = shared.ask('Please input question to add: ')
+		question = shared.input_paragraph('Please input question to add:').strip()
 		# Get answer
-		answer = shared.ask('Please input answer: ')
+		answer = shared.input_paragraph('Please input answer:').strip()
 		# Insert question, and tags
 		rsdb.add_question(question=question, answer=answer, tag_ids=list(tag_ids_chosen))
 		do_continue = shared.ask_continue('Add another question with these tags (y/n)?')
