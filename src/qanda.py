@@ -166,9 +166,9 @@ def ask_questions(question_ids):
 		# Ask question
 		shared.clear_screen()
 		shared.hash_image(question_string)
-		shared.page('\nQuestion ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\n\tQ: ' + shared.hash_color_string(question_string))
+		shared.page('\nQuestion ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\nQuestion:\n' + shared.hash_color_string(question_string))
 		# Give answer
-		shared.page('\n\tA: ' + shared.hash_color_string(answer))
+		shared.page('\nAnswer:\n' + shared.hash_color_string(answer))
 		title = get_question_history(question_id) + '\nSPACE to confirm, ENTER to continue, UP/DOWN to move\n'
 		options = [
 			{'action': 'right',    'description': 'I got that right'},
@@ -387,8 +387,8 @@ def get_question(question_id):
 def get_question_history(question_id):
 	history_string = ''
 	date_added, question, answer, answers = rsdb.get_question_history(question_id)
-	history_string += '\nQ: ' + question
-	history_string += '\nA: ' + answer
+	history_string += '\nQuestion:\n' + question
+	history_string += '\nAnswer:\n' + answer
 	history_string += '\nQuestion added on: ' + date_added + '\n\n'
 	if not answers:
 		history_string += 'This question has not been answered yet.\n'
