@@ -12,17 +12,17 @@ import datetime
 
 
 # Q&A - looks through learning folder for asciidoc files
-def run_qanda():
+def run_qanda(nosort=False, lastminute=False):
 	shared.clear_screen()
-	days = get_days()
 
-	question_ids              = set()
-	tagged_question_ids       = set()
-	tag_ids                   = []
-	already_asked_today_count = 0
-	deferred_questions        = 0
-	inactive_questions        = 0
-	not_considered_today      = 0
+	days                       = get_days()
+	question_ids               = set()
+	tagged_question_ids        = set()
+	tag_ids                    = []
+	already_asked_today_count  = 0
+	deferred_questions_count   = 0
+	inactive_questions_count   = 0
+	not_considered_today_count = 0
 
 	# Choose tags, get related questions
 	result, tag_ids             = question.choose_tags()
@@ -41,11 +41,11 @@ def run_qanda():
 			question_ids.add(question_id)
 		elif question_status == 'I':
 			# If question is inactive, don't include it.
-			inactive_questions += 1
+			inactive_questions_count += 1
 			continue
 		ask_after = rsdb.get_ask_after(question_id)
 		if ask_after is not None and ask_after >= datetime.datetime.today().strftime('%Y-%m-%d'):
-			deferred_questions += 1
+			deferred_questions_count += 1
 			continue
 		# If it has already been asked today, do not ask again
 		if rsdb.asked_today(question_id):
@@ -69,7 +69,7 @@ def run_qanda():
 			if times_asked < count:
 				question_ids.add(question_id)
 			else:
-				not_considered_today += 1
+				not_considered_today_count += 1
 			count, times_asked, question_status = None, None, None
 	tag_ids, tagged_question_ids = None, None
 
@@ -106,11 +106,12 @@ def run_qanda():
 			print('Un-captured quesiton history category - BUG')
 			print(results)
 			sys.exit(1)
-	random.shuffle(never_asked)
-	random.shuffle(asked_but_always_answered_wrongly)
-	random.shuffle(last_answered_wrongly)
-	random.shuffle(previously_answered_wrongly)
-	random.shuffle(asked_and_always_right)
+	if nosort:
+		random.shuffle(never_asked)
+		random.shuffle(asked_but_always_answered_wrongly)
+		random.shuffle(last_answered_wrongly)
+		random.shuffle(previously_answered_wrongly)
+		random.shuffle(asked_and_always_right)
 	question_ids = never_asked + asked_but_always_answered_wrongly + last_answered_wrongly + previously_answered_wrongly + asked_and_always_right
 	print('Questions to be asked:')
 	print('There are ' + str(len(never_asked)) + ' questions that have never been asked')
@@ -121,13 +122,17 @@ def run_qanda():
 	print('')
 	print('Other questions that will not be asked:')
 	print('There are ' + str(already_asked_today_count) + ' questions that have already been answered today')
-	print('There are ' + str(deferred_questions) + ' deferred questions')
-	print('There are ' + str(not_considered_today) + ' questions that are not being considered today')
-	print('There are ' + str(inactive_questions) + ' inactive questions')
+	print('There are ' + str(deferred_questions_count) + ' deferred questions')
+	print('There are ' + str(not_considered_today_count) + ' questions that are not being considered today')
+	print('There are ' + str(inactive_questions_count) + ' inactive questions')
 	print('')
 	shared.page()
-	# Ask the questions
-	ask_questions(list(question_ids))
+	if lastminute:
+	    # Show the questions
+		show_questions(list(question_ids))
+	else:
+	    # Ask the questions
+		ask_questions(list(question_ids))
 	question_ids = None
 	return True
 
@@ -152,6 +157,21 @@ def run_revise():
 	ask_questions(list(question_ids))
 	question_ids = None
 	return True
+
+
+def show_questions(question_ids):
+	assert isinstance(question_ids, list)
+	num_questions           = len(question_ids)
+	num_questions_remaining = num_questions
+	num_questions_asked     = 0
+	for question_id in question_ids:
+		num_questions_remaining -= 1
+		num_questions_asked     += 1
+		question_string, answer, question_status = get_question(question_id)
+		# Ask question
+		shared.clear_screen()
+		shared.hash_image(question_string)
+		shared.page('\nQuestion ' + str(num_questions_asked) + ' of ' + str(num_questions) + '\n\nQuestion:\n' + shared.hash_color_string(question_string) + '\n\nAnswer:\n' + shared.hash_color_string(answer))
 
 
 def ask_questions(question_ids):
